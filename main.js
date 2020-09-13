@@ -46,9 +46,14 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 
 */
 
+function addArtist(){
+  process.argv.slice(1).forEach(argument => console.log(argument));
+}
+
 function main() {
-  console.log('arguments: ');
-  process.argv.forEach(argument => console.log(argument));
+  console.log(process.argv[2]);
 }
 
 main();
+
+exports.addArtist = addArtist;

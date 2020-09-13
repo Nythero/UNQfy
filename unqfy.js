@@ -14,13 +14,13 @@ class UNQfy {
   //   artistData.name (string)
   //   artistData.country (string)
   // retorna: el nuevo artista creado
-  addArtist(name, country) {
+  addArtist(artistData) {
   /* Crea un artista y lo agrega a unqfy.
   El objeto artista creado debe soportar (al menos):
     - una propiedad name (string)
     - una propiedad country (string)
   */
-    const artistaNuevo = new Artist(name, country);
+    const artistaNuevo = new Artist(artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
     return artistaNuevo;
   }

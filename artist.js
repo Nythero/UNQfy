@@ -4,20 +4,20 @@ class Artist{
         this._country = country;
         this._albums = [];
     }
-    name(){
+    get name(){
         return this._name;
     }
-    country(){
+    get country(){
         return this._country;
     }
     albums(){
         return this._albums;
     }
     name(newName){
-        this.name = newName;
+        this._name = newName;
     }
     country(newCountry){
-        this.country = newCountry;
+        this._country = newCountry;
     }
     addAlbum(){
         //TODO
