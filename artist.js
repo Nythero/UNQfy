@@ -13,10 +13,10 @@ class Artist{
     albums(){
         return this._albums;
     }
-    name(newName){
+    set name(newName){
         this._name = newName;
     }
-    country(newCountry){
+    set country(newCountry){
         this._country = newCountry;
     }
     addAlbum(){

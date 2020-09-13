@@ -28,8 +28,8 @@ describe('Add, remove and filter data', () => {
   it('should add an artist', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
 
-    assert.equal(artist.name(), 'Guns n\' Roses');
-    assert.equal(artist.country(), 'USA');
+    assert.equal(artist.name, 'Guns n\' Roses');
+    assert.equal(artist.country, 'USA');
 
   });
 
