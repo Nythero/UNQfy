@@ -1,20 +1,25 @@
 
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
+const Artist = require('./artist');
 
 
 class UNQfy {
+  
+  let _artistas = [];
 
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
   // retorna: el nuevo artista creado
-  addArtist(artistData) {
+  addArtist(name, country) {
   /* Crea un artista y lo agrega a unqfy.
   El objeto artista creado debe soportar (al menos):
     - una propiedad name (string)
     - una propiedad country (string)
   */
+    const artistaNuevo = new Artist(name, country);
+    _artistas.push(artistaNuevo);
   }
 
 

@@ -1,5 +1,5 @@
 class Artist{
-    constructor(name, string, country){
+    constructor(name, country){
         this._name = name;
         this._country = country;
         this._albums = [];
