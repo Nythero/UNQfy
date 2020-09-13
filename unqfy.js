@@ -6,8 +6,10 @@ const Artist = require('./artist');
 
 class UNQfy {
   
-  let _artistas = [];
-
+  constructor(){
+    this._artistas = [];
+  } 	
+  
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
@@ -19,7 +21,8 @@ class UNQfy {
     - una propiedad country (string)
   */
     const artistaNuevo = new Artist(name, country);
-    _artistas.push(artistaNuevo);
+    this._artistas.push(artistaNuevo);
+    return artistaNuevo;
   }
 
 
