@@ -46,9 +46,30 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 
 */
 
+function dataFromArgs(args){
+  const data = {};
+  for (let i = 3; i < args.length; i+= 2){
+    data[args[i]] = args[i+1];
+  }
+  return data;
+}
+
+function addArtist(args){
+  const dataArtist = dataFromArgs(args);
+  const unqfy = getUNQfy();
+  unqfy.addArtist(dataArtist);
+  saveUNQfy(unqfy);
+}
+
 function main() {
-  console.log('arguments: ');
-  process.argv.forEach(argument => console.log(argument));
+  const command = process.argv[2];
+  switch (command){
+    case 'addArtist':
+      addArtist(process.argv);
+      break;
+    default:
+      console.log('El comando ' + command + ' no es valido');
+  }
 }
 
 main();
