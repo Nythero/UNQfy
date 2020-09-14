@@ -1,25 +1,29 @@
-class Artist{
-  constructor(name, country){
+class Artist {
+  constructor(id, name, country) {
+    this._id = id;
     this._name = name;
     this._country = country;
     this._albums = [];
   }
-  get name(){
+  get id() {
+    return this._id;
+  }
+  get name() {
     return this._name;
   }
-  get country(){
+  get country() {
     return this._country;
   }
-  albums(){
+  albums() {
     return this._albums;
   }
-  set name(newName){
+  set name(newName) {
     this._name = newName;
   }
-  set country(newCountry){
+  set country(newCountry) {
     this._country = newCountry;
   }
-  addAlbum(){
+  addAlbum() {
     //TODO
   }
 }
