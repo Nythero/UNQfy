@@ -20,7 +20,7 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
-    const artistaNuevo = new Artist(artistData.name, artistData.country);
+    const artistaNuevo = new Artist(this._artistas.length+1, artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
     return artistaNuevo;
   }
@@ -54,7 +54,11 @@ class UNQfy {
   }
 
   getArtistById(id) {
+    return this._artistas.find(a => a.id === id);
+  }
 
+  getArtists() {
+    return this._artistas;
   }
 
   getAlbumById(id) {

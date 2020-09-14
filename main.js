@@ -1,10 +1,8 @@
-
-
-const fs = require('fs'); // necesitado para guardar/cargar unqfy
-const unqmod = require('./unqfy'); // importamos el modulo unqfy
+const fs = require("fs"); // necesitado para guardar/cargar unqfy
+const unqmod = require("./unqfy"); // importamos el modulo unqfy
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
-function getUNQfy(filename = 'data.json') {
+function getUNQfy(filename = "data.json") {
   let unqfy = new unqmod.UNQfy();
   if (fs.existsSync(filename)) {
     unqfy = unqmod.UNQfy.load(filename);
@@ -12,7 +10,7 @@ function getUNQfy(filename = 'data.json') {
   return unqfy;
 }
 
-function saveUNQfy(unqfy, filename = 'data.json') {
+function saveUNQfy(unqfy, filename = "data.json") {
   unqfy.save(filename);
 }
 
@@ -46,29 +44,41 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 
 */
 
-function dataFromArgs(args){
+const dataFromArgs = args => {
   const data = {};
-  for (let i = 3; i < args.length; i+= 2){
-    data[args[i]] = args[i+1];
+  for (let i = 3; i < args.length; i += 2) {
+    data[args[i]] = args[i + 1];
   }
   return data;
 }
 
-function addArtist(args){
+const addArtist = args => {
   const dataArtist = dataFromArgs(args);
   const unqfy = getUNQfy();
-  unqfy.addArtist(dataArtist);
+  let res = unqfy.addArtist(dataArtist);
   saveUNQfy(unqfy);
-}
+  console.debug(res);
+  return res;
+};
+
+const getArtistById = id => console.debug(getUNQfy().getArtistById(id));
+
+const getArtists = () => console.debug(getUNQfy().getArtists());
 
 function main() {
   const command = process.argv[2];
-  switch (command){
-    case 'addArtist':
+  switch (command) {
+    case "addArtist":
       addArtist(process.argv);
       break;
+    case "getArtistById":
+      getArtistById(parseInt(process.argv[3]));
+      break;
+    case "getArtists":
+      getArtists();
+      break;
     default:
-      console.log('El comando ' + command + ' no es valido');
+      console.log("El comando " + command + " no es valido");
   }
 }
 
