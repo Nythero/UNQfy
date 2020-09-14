@@ -1,15 +1,14 @@
-class CommandSelector {
-  static addArtist(unqfy, dataArtist){
+let commandSelector = {
+  addArtist(unqfy, dataArtist){
     unqfy.addArtist(dataArtist);
-  }
-  
-  static getArtistById(unqfy,id){
+  },
+
+  getArtistById(unqfy,id){
     console.debug(unqfy.getArtistById(id));
-  }
+  },
   
-  static getArtists(unqfy){
+  getArtists(unqfy){
     console.debug(unqfy.getArtists());
   }
 }
-
-module.exports = CommandSelector;
+module.exports = commandSelector;
