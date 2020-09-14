@@ -2,6 +2,7 @@
 
 const fs = require('fs'); // necesitado para guardar/cargar unqfy
 const unqmod = require('./unqfy'); // importamos el modulo unqfy
+const commandSelector = require('./commandSelector'); // importamos los comandos a ejecutar
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = 'data.json') {
@@ -54,22 +55,12 @@ function dataFromArgs(args){
   return data;
 }
 
-function addArtist(args){
-  const dataArtist = dataFromArgs(args);
-  const unqfy = getUNQfy();
-  unqfy.addArtist(dataArtist);
-  saveUNQfy(unqfy);
-}
-
 function main() {
   const command = process.argv[2];
-  switch (command){
-    case 'addArtist':
-      addArtist(process.argv);
-      break;
-    default:
-      console.log('El comando ' + command + ' no es valido');
-  }
+  const parameters = dataFromArgs(process.argv);
+  const unqfy = getUNQfy();
+  commandSelector[command](unqfy, parameters);
+  saveUNQfy(unqfy);
 }
 
 main();
