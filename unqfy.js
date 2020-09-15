@@ -22,6 +22,7 @@ class UNQfy {
   */
     const artistaNuevo = new Artist(this._artistas.length+1, artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
+    console.debug(this._artistas);
     return artistaNuevo;
   }
 

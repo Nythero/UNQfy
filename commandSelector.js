@@ -1,24 +1,21 @@
 const commandSelector = {
-  addArtist(unqfy, dataArtist){
-    unqfy.addArtist(dataArtist);
+  addArtist(unqfy, dataArtist) {
+    let params = { name: dataArtist[0], country: dataArtist[1] };
+    unqfy.addArtist(params);
   },
 
-  deleteArtist(unqfy, paramId) {
-    let id = this.getIdFromParam(paramId);
+  deleteArtist(unqfy, idParam) {
+    let id = parseInt(idParam[0]);
     unqfy.deleteArtist(id);
   },
 
-  getArtistById(unqfy, paramId){
-    let id = this.getIdFromParam(paramId);
+  getArtistById(unqfy, idParam) {
+    let id = parseInt(idParam[0]);
     console.debug(unqfy.getArtistById(id));
   },
-  
-  getArtists(unqfy){
+
+  getArtists(unqfy) {
     console.debug(unqfy.getArtists());
   },
-
-  getIdFromParam(paramId) {
-    return parseInt(Object.keys(paramId)[0]);
-  }
-}
+};
 module.exports = commandSelector;

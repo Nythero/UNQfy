@@ -48,13 +48,15 @@ function saveUNQfy(unqfy, filename = "data.json") {
 
 */
 
-const dataFromArgs = args => {
+const dataFromArgs_old = args => {
   const data = {};
   for (let i = 3; i < args.length; i += 2) {
     data[args[i]] = args[i + 1];
   }
   return data;
 }
+
+const dataFromArgs = args => args.slice(3, args.length);
 
 function validarCommand(command){
   if (commandSelector[command] === undefined){
