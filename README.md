@@ -10,6 +10,7 @@ node main.js [comando] [parametros]
 
 Los comandos disponibles son:
 * addArtist [name] [nombre del artista] [country] [pais]
+* deleteArtist [id del artista]
 * getArtistById [id del artista]
 * getArtists
 
