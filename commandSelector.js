@@ -19,7 +19,8 @@ const commandSelector = {
   },
 
   addAlbum(unqfy, dataAlbum){
-    unqfy.addAlbum(dataAlbum);
+    let id = parseInt(dataAlbum[0]);
+    unqfy.addAlbum(id, {name: dataAlbum[1], year: dataAlbum[2]});
   }
 }
 

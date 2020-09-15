@@ -8,13 +8,13 @@ let IdManager = {
     return (unqfy.getArtists().length + 1) * this._bytesIniciales['artist'];
   },
   idNewAlbum(artist){
-    return artist.getId() + (artist.getAlbums().length + 1) * this._bytesIniciales['album'];
+    return artist.id + (artist.cantidadAlbums() + 1) * this._bytesIniciales['album'];
   },
   idNewTrack(album){
-    return album.getId() + (album.getTracks().length + 1) * this._bytesIniciales['track'];
+    return album.id + (album.getTracks().length + 1) * this._bytesIniciales['track'];
   },
   getId(field,id){
-    return id - (id % this._bytesIniciales['field']);
+    return id - (id % this._bytesIniciales[field]);
   }
 }
 

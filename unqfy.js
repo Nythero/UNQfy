@@ -42,13 +42,13 @@ class UNQfy {
   //   albumData.name (string)
   //   albumData.year (number)
   // retorna: el nuevo album creado
-  addAlbum(albumData) {
+  addAlbum(artistId, albumData) {
   /* Crea un album y lo agrega al artista con id artistId.
     El objeto album creado debe tener (al menos):
      - una propiedad name (string)
      - una propiedad year (number)
   */
-    return this.getArtistById(albumData.id).addAlbum(albumData);
+    return this.getArtistById(artistId).addAlbum(albumData);
   }
 
 
