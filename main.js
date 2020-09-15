@@ -1,5 +1,9 @@
-const fs = require("fs"); // necesitado para guardar/cargar unqfy
-const unqmod = require("./unqfy"); // importamos el modulo unqfy
+
+
+const fs = require('fs'); // necesitado para guardar/cargar unqfy
+const unqmod = require('./unqfy'); // importamos el modulo unqfy
+const commandSelector = require('./commandSelector'); // importamos los comandos a ejecutar
+const NonexistentCommandError = require('./nonexistentCommandError');
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = "data.json") {
@@ -44,7 +48,7 @@ function saveUNQfy(unqfy, filename = "data.json") {
 
 */
 
-const dataFromArgs = args => {
+const dataFromArgs_old = args => {
   const data = {};
   for (let i = 3; i < args.length; i += 2) {
     data[args[i]] = args[i + 1];
@@ -52,34 +56,21 @@ const dataFromArgs = args => {
   return data;
 }
 
-const addArtist = args => {
-  const dataArtist = dataFromArgs(args);
-  const unqfy = getUNQfy();
-  let res = unqfy.addArtist(dataArtist);
-  saveUNQfy(unqfy);
-  console.debug(res);
-  return res;
-};
+const dataFromArgs = args => args.slice(3, args.length);
 
-const getArtistById = id => console.debug(getUNQfy().getArtistById(id));
-
-const getArtists = () => console.debug(getUNQfy().getArtists());
+function validarCommand(command){
+  if (commandSelector[command] === undefined){
+    throw new NonexistentCommandError(command);
+  }
+}
 
 function main() {
   const command = process.argv[2];
-  switch (command) {
-    case "addArtist":
-      addArtist(process.argv);
-      break;
-    case "getArtistById":
-      getArtistById(parseInt(process.argv[3]));
-      break;
-    case "getArtists":
-      getArtists();
-      break;
-    default:
-      console.log("El comando " + command + " no es valido");
-  }
-}
+  validarCommand(command);
+  const parameters = dataFromArgs(process.argv);
+  const unqfy = getUNQfy();
+  commandSelector[command](unqfy, parameters);
+  saveUNQfy(unqfy);
+};
 
 main();

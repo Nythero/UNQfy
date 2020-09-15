@@ -22,7 +22,18 @@ class UNQfy {
   */
     const artistaNuevo = new Artist(this._artistas.length+1, artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
+    console.debug(this._artistas);
     return artistaNuevo;
+  }
+
+  // id: id del artista a eliminar
+  deleteArtist(id) {
+    /* Elimina de unqfy el artista con el id indicado */
+    let elemIndex = this._artistas.indexOf(id);
+    this._artistas.splice(elemIndex, 1);
+    //TODO: DELETE
+    console.debug(this._artistas);
+    //TODO.
   }
 
 
