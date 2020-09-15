@@ -25,6 +25,16 @@ class UNQfy {
     return artistaNuevo;
   }
 
+  // id: id del artista a eliminar
+  deleteArtist(id) {
+    /* Elimina de unqfy el artista con el id indicado */
+    let elemIndex = this._artistas.indexOf(id);
+    this._artistas.splice(elemIndex, 1);
+    //TODO: DELETE
+    console.debug(this._artistas);
+    //TODO.
+  }
+
 
   // albumData: objeto JS con los datos necesarios para crear un album
   //   albumData.name (string)
