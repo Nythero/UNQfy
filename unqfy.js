@@ -64,6 +64,7 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
+    return this.getAlbumById(albumId).addTrack(trackData)
   }
 
   getArtistById(id) {
@@ -75,7 +76,7 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-    return getArtistById(idManager.getId('artist', id)).getAlbumById(id);
+    return this.getArtistById(idManager.getId('artist', id)).getAlbumById(id);
   }
 
   getTrackById(id) {

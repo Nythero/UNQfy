@@ -1,3 +1,6 @@
+let Track = require('./track');
+let idManager = require('./idManager');
+
 class Album{
   constructor(id, name, year){
     this._id = id;
@@ -13,6 +16,14 @@ class Album{
   }
   get year(){
     return this._year;
+  }
+  addTrack(dataTrack){
+    const track = new Track(idManager.idNewTrack(this), dataTrack.name, dataTrack.duration, dataTrack.genres);       
+    this._tracks.push(track);
+    return track;
+  }
+  cantidadTracks(){
+    return this._tracks.length;
   }
 }
 

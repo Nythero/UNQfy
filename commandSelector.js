@@ -21,6 +21,12 @@ const commandSelector = {
   addAlbum(unqfy, dataAlbum){
     let id = parseInt(dataAlbum[0]);
     unqfy.addAlbum(id, {name: dataAlbum[1], year: dataAlbum[2]});
+  },
+
+  addTrack(unqfy, param){
+    let id = parseInt(param[0]);
+    let genres = param.slice(3);
+    unqfy.addTrack(id, {name: param[1], duration: param[2], genres});
   }
 }
 

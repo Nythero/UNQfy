@@ -11,7 +11,7 @@ let IdManager = {
     return artist.id + (artist.cantidadAlbums() + 1) * this._bytesIniciales['album'];
   },
   idNewTrack(album){
-    return album.id + (album.getTracks().length + 1) * this._bytesIniciales['track'];
+    return album.id + (album.cantidadTracks() + 1) * this._bytesIniciales['track'];
   },
   getId(field,id){
     return id - (id % this._bytesIniciales[field]);
