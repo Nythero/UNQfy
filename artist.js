@@ -1,3 +1,5 @@
+const Album = require('./album');
+
 class Artist {
   constructor(id, name, country) {
     this._id = id;
@@ -23,8 +25,13 @@ class Artist {
   set country(newCountry) {
     this._country = newCountry;
   }
-  addAlbum() {
-    //TODO
+  addAlbum(dataAlbum) {
+    const album = new Album(Album.idNewAlbum(this), dataAlbum.name, dataAlbum.year);
+    this._albums.push(album);
+    return album;
+  }
+  getAlbumById(id){
+    return this._albums.find(album => album.id === id);
   }
 }
 

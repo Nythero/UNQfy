@@ -9,6 +9,9 @@ let commandSelector = {
   
   getArtists(unqfy){
     console.debug(unqfy.getArtists());
+  },
+  addAlbum(unqfy, dataAlbum){
+    unqfy.addAlbum(dataAlbum);
   }
 }
 module.exports = commandSelector;
