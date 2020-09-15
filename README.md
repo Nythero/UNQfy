@@ -9,7 +9,8 @@ Para el uso de unqfy se debe usar la sintaxis
 node main.js [comando] [parametros]
 
 Los comandos disponibles son:
-* addArtist [name] [nombre del artista] [country] [pais]
+* addArtist [nombre] [pais]
+* deleteArtist [id del artista]
 * getArtistById [id del artista]
 * getArtists
 

@@ -2,7 +2,8 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 const Artist = require('./artist');
-
+const idManager = require('./idManager');
+const Album = require('./album');
 
 class UNQfy {
   
@@ -20,9 +21,20 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
-    const artistaNuevo = new Artist(this._artistas.length+1, artistData.name, artistData.country);
+    const artistaNuevo = new Artist(idManager.idNewArtist(this), artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
+    console.debug(this._artistas);
     return artistaNuevo;
+  }
+
+  // id: id del artista a eliminar
+  deleteArtist(id) {
+    /* Elimina de unqfy el artista con el id indicado */
+    let elemIndex = this._artistas.indexOf(id);
+    this._artistas.splice(elemIndex, 1);
+    //TODO: DELETE
+    console.debug(this._artistas);
+    //TODO.
   }
 
 
@@ -36,6 +48,7 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
+    return this.getArtistById(artistId).addAlbum(albumData);
   }
 
 
@@ -62,7 +75,7 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-
+    return getArtistById(idManager.getId('artist', id)).getAlbumById(id);
   }
 
   getTrackById(id) {
@@ -108,7 +121,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist];
+    const classes = [UNQfy, Artist, Album];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }

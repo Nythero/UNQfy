@@ -1,3 +1,6 @@
+const Album = require('./album');
+const idManager = require('./idManager');
+
 class Artist {
   constructor(id, name, country) {
     this._id = id;
@@ -23,8 +26,16 @@ class Artist {
   set country(newCountry) {
     this._country = newCountry;
   }
-  addAlbum() {
-    //TODO
+  addAlbum(dataAlbum) {
+    const album = new Album(idManager.idNewAlbum(this), dataAlbum.name, dataAlbum.year);
+    this._albums.push(album);
+    return album;
+  }
+  getAlbumById(id){
+    return this._albums.find(album => album.id === id);
+  }
+  cantidadAlbums(){
+    return this._albums.length;
   }
 }
 

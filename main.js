@@ -2,7 +2,7 @@
 
 const fs = require('fs'); // necesitado para guardar/cargar unqfy
 const unqmod = require('./unqfy'); // importamos el modulo unqfy
-const CommandSelector = require('./commandSelector'); // importamos los comandos a ejecutar
+const commandSelector = require('./commandSelector'); // importamos los comandos a ejecutar
 const NonexistentCommandError = require('./nonexistentCommandError');
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
@@ -48,16 +48,10 @@ function saveUNQfy(unqfy, filename = "data.json") {
 
 */
 
-const dataFromArgs = args => {
-  const data = {};
-  for (let i = 3; i < args.length; i += 2) {
-    data[args[i]] = args[i + 1];
-  }
-  return data;
-}
+const dataFromArgs = args => args.slice(3, args.length);
 
 function validarCommand(command){
-  if (CommandSelector[command] === undefined){
+  if (commandSelector[command] === undefined){
     throw new NonexistentCommandError(command);
   }
 }
@@ -67,7 +61,7 @@ function main() {
   validarCommand(command);
   const parameters = dataFromArgs(process.argv);
   const unqfy = getUNQfy();
-  CommandSelector[command](unqfy, parameters);
+  commandSelector[command](unqfy, parameters);
   saveUNQfy(unqfy);
 };
 
