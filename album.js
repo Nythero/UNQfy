@@ -7,6 +7,7 @@ class Album{
     this._name = name;
     this._year = year;
     this._tracks = [];
+    this._newTrackId = 1;
   }
   get id(){
     return this._id;
@@ -22,8 +23,11 @@ class Album{
     this._tracks.push(track);
     return track;
   }
-  cantidadTracks(){
-    return this._tracks.length;
+  newTrackId(){
+    return this._newTrackId++;
+  }
+  getTrackById(id){
+    return this._tracks.find(track => idManager.equalId('track', id, track.id));
   }
 }
 

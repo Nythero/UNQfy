@@ -5,16 +5,19 @@ let IdManager = {
     track: Math.pow(2,0)
   },
   idNewArtist(unqfy){
-    return (unqfy.getArtists().length + 1) * this._bytesIniciales['artist'];
+    return (unqfy.newArtistId) * this._bytesIniciales['artist'];
   },
   idNewAlbum(artist){
-    return artist.id + (artist.cantidadAlbums() + 1) * this._bytesIniciales['album'];
+    return artist.id + (artist.newAlbumId()) * this._bytesIniciales['album'];
   },
   idNewTrack(album){
-    return album.id + (album.cantidadTracks() + 1) * this._bytesIniciales['track'];
+    return album.id + (album.newTrackId()) * this._bytesIniciales['track'];
   },
-  getId(field,id){
+  _getId(field,id){
     return id - (id % this._bytesIniciales[field]);
+  },
+  equalId(field, firstId, secondId){
+    return this._getId(field, firstId) ===  this._getId(field, secondId);
   }
 }
 
