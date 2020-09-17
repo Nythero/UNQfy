@@ -1,5 +1,6 @@
-let Track = require('./track');
-let idManager = require('./idManager');
+const Track = require('./track');
+const idManager = require('./idManager');
+const NonexistentTrackError = require('./nonexistentTrackError');
 
 class Album{
   constructor(id, name, year){
@@ -27,7 +28,11 @@ class Album{
     return this._newTrackId++;
   }
   getTrackById(id){
-    return this._tracks.find(track => idManager.equalId('track', id, track.id));
+    const track = this._tracks.find(track => idManager.equalId('track', id, track.id));
+    if(track === undefined){
+      throw new NonexistentTrackError(id);
+    }
+    return track;
   }
 }
 

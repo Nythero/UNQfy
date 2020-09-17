@@ -1,5 +1,6 @@
 const Album = require('./album');
 const idManager = require('./idManager');
+const NonexistentAlbumError = require('./nonexistentAlbumError');
 
 class Artist {
   constructor(id, name, country) {
@@ -27,7 +28,11 @@ class Artist {
     return album;
   }
   getAlbumById(id){
-    return this._albums.find(album => idManager.equalId('album', album.id, id));
+    const album = this._albums.find(album => idManager.equalId('album', album.id, id));
+    if (album === undefined){
+      throw new NonexistentAlbumError(id);
+    }
+    return album;
   }
   newAlbumId(){
     return this._newAlbumId++;
