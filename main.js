@@ -54,7 +54,7 @@ function main() {
   commandSelector.validarCommand(command);
   const parameters = dataFromArgs(process.argv);
   const unqfy = getUNQfy();
-  commandSelector.select(command)(unqfy, parameters);
+  console.debug(commandSelector.select(command)(unqfy, parameters));
   saveUNQfy(unqfy);
 };
 
