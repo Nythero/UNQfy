@@ -1,9 +1,13 @@
+const Album = require('./album');
+const idManager = require('./idManager');
+
 class Artist {
   constructor(id, name, country) {
     this._id = id;
     this._name = name;
     this._country = country;
     this._albums = [];
+    this._newAlbumId = 1;
   }
   get id() {
     return this._id;
@@ -17,14 +21,16 @@ class Artist {
   albums() {
     return this._albums;
   }
-  set name(newName) {
-    this._name = newName;
+  addAlbum(dataAlbum) {
+    const album = new Album(idManager.idNewAlbum(this), dataAlbum.name, dataAlbum.year);
+    this._albums.push(album);
+    return album;
   }
-  set country(newCountry) {
-    this._country = newCountry;
+  getAlbumById(id){
+    return this._albums.find(album => idManager.equalId('album', album.id, id));
   }
-  addAlbum() {
-    //TODO
+  newAlbumId(){
+    return this._newAlbumId++;
   }
 }
 

@@ -2,12 +2,15 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 const Artist = require('./artist');
-
+const idManager = require('./idManager');
+const Album = require('./album');
+const Track = require('./track');
 
 class UNQfy {
   
   constructor(){
     this._artistas = [];
+    this._newArtistId = 1;
   } 	
   
   // artistData: objeto JS con los datos necesarios para crear un artista
@@ -20,9 +23,8 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
-    const artistaNuevo = new Artist(this._artistas.length+1, artistData.name, artistData.country);
+    const artistaNuevo = new Artist(idManager.idNewArtist(this), artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
-    console.debug(this._artistas);
     return artistaNuevo;
   }
 
@@ -47,6 +49,7 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
+    return this.getArtistById(artistId).addAlbum(albumData);
   }
 
 
@@ -62,10 +65,11 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
+    return this.getAlbumById(albumId).addTrack(trackData);
   }
 
   getArtistById(id) {
-    return this._artistas.find(a => a.id === id);
+    return this._artistas.find(a => idManager.equalId('artist', id, a.id));
   }
 
   getArtists() {
@@ -73,11 +77,11 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-
+    return this.getArtistById(id).getAlbumById(id);
   }
 
   getTrackById(id) {
-
+    return this.getAlbumById(id).getTrackById(id);
   }
 
   getPlaylistById(id) {
@@ -119,8 +123,12 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist];
+    const classes = [UNQfy, Artist, Album, Track];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
+  }
+
+  get newArtistId(){
+    return this._newArtistId++;
   }
 }
 
