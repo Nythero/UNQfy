@@ -1,6 +1,6 @@
 class NonexistentArtistError extends Error{
-  constructor(artistId){
-    super('Nose pudo completar la accion, el artista con id ' + artistId + ' no existe');
+  constructor(field, value){
+    super('Nose pudo completar la accion, el artista con ' + field + ' ' + value + ' no existe');
     this.name = 'NonexistentArtistError';
   }
 }

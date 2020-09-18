@@ -96,7 +96,7 @@ class UNQfy {
     const artist = this._artistas.find(a => idManager.equalId('artist', id, a.id));
     try {
       if (artist === undefined){
-        throw new NonexistentArtistError(id);
+        throw new NonexistentArtistError('id', id);
       }
     }
     catch (error){
@@ -168,7 +168,22 @@ class UNQfy {
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
+    const artist = this._artistas.find(artista => artistName == artista.name);
 
+    try {
+      if (artist === undefined){
+        throw new NonexistentArtistError('name', artistName);
+      }
+    }
+    catch (error){
+      if (error instanceof NonexistentArtistError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
+    return artist.albums.flatMap(album => album.tracks);
   }
 
 
