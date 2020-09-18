@@ -1,6 +1,7 @@
 const commandSelectorArtist = require('./commandSelectorArtist');
 const commandSelectorAlbum = require('./commandSelectorAlbum');
 const commandSelectorTrack = require('./commandSelectorTrack');
+const commandSelectorDefault = require('./commandSelectorDefault');
 const NonexistentCommandError = require('./nonexistentCommandError');
 
 /*Para agregar un comando de unqfy: Se necesita agregarlo en el commandSelector correspondiente
@@ -8,7 +9,8 @@ const NonexistentCommandError = require('./nonexistentCommandError');
 const commandSelector = {
   _commandSelectors : [commandSelectorArtist,
 	               commandSelectorAlbum,
-	               commandSelectorTrack],
+	               commandSelectorTrack,
+                       commandSelectorDefault],
   select(command){
     const selector = this._commandSelectors.find(cs => cs.hasOwnProperty(command));
     return selector[command];

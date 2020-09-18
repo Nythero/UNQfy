@@ -1,5 +1,8 @@
-class Track {
+const MatchingObject = require('./matchingObject');
+
+class Track extends MatchingObject{
   constructor(id, name, duration, genres){
+    super();
     this._id = id;
     this._name = name;
     this._duration = duration;
@@ -16,6 +19,9 @@ class Track {
   }
   get genres(){
     return this._genres;
+  }
+  elementsThatMatch(field, name){
+    return [];
   }
 }
 

@@ -1,9 +1,11 @@
 const Track = require('./track');
 const idManager = require('./idManager');
 const NonexistentTrackError = require('./nonexistentTrackError');
+const MatchingObject = require('./matchingObject');
 
-class Album{
+class Album extends MatchingObject{
   constructor(id, name, year){
+    super('tracks');
     this._id = id;
     this._name = name;
     this._year = year;
@@ -18,6 +20,9 @@ class Album{
   }
   get year(){
     return this._year;
+  }
+  get tracks(){
+    return this._tracks;
   }
   addTrack(dataTrack){
     const track = new Track(idManager.idNewTrack(this), dataTrack.name, dataTrack.duration, dataTrack.genres);       

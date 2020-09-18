@@ -132,6 +132,11 @@ class UNQfy {
     }
   }
 
+  search(name){
+    const matchingArtists = this._artistas.filter(artist => artist.matchOrElementsMatch('name', name));
+    return matchingArtists.flatMap(artist => artist.matchingElements('name', name));
+  }
+
   getTrackById(id) {
     const album = this.getAlbumById(id);
     try {
