@@ -26,6 +26,10 @@ class Artist {
     this._albums.push(album);
     return album;
   }
+  deleteAlbum(id) {
+    this._albums = this._albums.filter(a => a.id !== id);
+    return this._albums;
+  }
   getAlbumById(id){
     return this._albums.find(album => idManager.equalId('album', album.id, id));
   }

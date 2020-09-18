@@ -31,11 +31,8 @@ class UNQfy {
   // id: id del artista a eliminar
   deleteArtist(id) {
     /* Elimina de unqfy el artista con el id indicado */
-    let elemIndex = this._artistas.indexOf(id);
-    this._artistas.splice(elemIndex, 1);
-    //TODO: DELETE
-    console.debug(this._artistas);
-    //TODO.
+    this._artistas = this._artistas.filter(a => a.id !== id);
+    return this._artistas;
   }
 
 
@@ -50,6 +47,13 @@ class UNQfy {
      - una propiedad year (number)
   */
     return this.getArtistById(artistId).addAlbum(albumData);
+  }
+
+  // id: id del album a eliminar
+  deleteAlbum(id) {
+    /* Elimina de unqfy el album con el id indicado */
+    const albums = this.getArtistById(id).deleteAlbum(id);
+    return albums;
   }
 
 

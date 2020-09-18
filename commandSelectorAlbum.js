@@ -6,6 +6,10 @@ let commandSelectorAlbum = {
   getAlbumById(unqfy, dataAlbum){
     let id = parseInt(dataAlbum[0]);
     return unqfy.getAlbumById(id);
+  },
+  deleteAlbum(unqfy, idParam) {
+    let id = parseInt(idParam[0]);
+    return unqfy.deleteAlbum(id);
   }
 }
 
