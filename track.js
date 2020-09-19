@@ -1,5 +1,8 @@
-class Track {
+const MatchingObject = require('./matchingObject');
+
+class Track extends MatchingObject{
   constructor(id, name, duration, genres){
+    super();
     this._id = id;
     this._name = name;
     this._duration = duration;
@@ -16,6 +19,16 @@ class Track {
   }
   get genres(){
     return this._genres;
+  }
+  addIfMatchName(dictionary, name){
+    super.addIfMatch(dictionary.tracks, 'name', name);
+  }
+  addIfMatchGenres(array, genres){
+    for (let i = 0; i < genres.length; i++){
+      if(!array.includes(this)){
+        super.addIfMatch(array, 'genres', genres[i])
+      }  
+    }
   }
 }
 

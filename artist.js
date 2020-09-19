@@ -1,8 +1,13 @@
 const Album = require('./album');
 const idManager = require('./idManager');
+const MatchingObject = require('./matchingObject');
 
-class Artist {
+//Errores
+const NonexistentAlbumError = require('./error/nonexistentAlbumError');
+
+class Artist extends MatchingObject{
   constructor(id, name, country) {
+    super();
     this._id = id;
     this._name = name;
     this._country = country;
@@ -12,14 +17,14 @@ class Artist {
   get id() {
     return this._id;
   }
-  get name() {
+  get albums() {
+    return this._albums;
+  }
+  get name(){
     return this._name;
   }
-  get country() {
+  get country(){
     return this._country;
-  }
-  albums() {
-    return this._albums;
   }
   addAlbum(dataAlbum) {
     const album = new Album(idManager.idNewAlbum(this), dataAlbum.name, dataAlbum.year);
@@ -31,10 +36,18 @@ class Artist {
     return this._albums;
   }
   getAlbumById(id){
-    return this._albums.find(album => idManager.equalId('album', album.id, id));
+    const album = this._albums.find(album => idManager.equalId('album', album.id, id));
+    if (album === undefined){
+      throw new NonexistentAlbumError(id);
+    }
+    return album;
   }
   newAlbumId(){
     return this._newAlbumId++;
+  }
+  addIfMatchName(dictionary, name){
+    super.addIfMatch(dictionary.artists, 'name', name);
+    this.albums.forEach(album => album.addIfMatchName(dictionary, name));
   }
 }
 
