@@ -1,8 +1,11 @@
-let Track = require('./track');
-let idManager = require('./idManager');
+const Track = require('./track');
+const idManager = require('./idManager');
+const NonexistentTrackError = require('./nonexistentTrackError');
+const MatchingObject = require('./matchingObject');
 
-class Album{
+class Album extends MatchingObject{
   constructor(id, name, year){
+    super('tracks');
     this._id = id;
     this._name = name;
     this._year = year;
@@ -18,6 +21,9 @@ class Album{
   get year(){
     return this._year;
   }
+  get tracks(){
+    return this._tracks;
+  }
   addTrack(dataTrack){
     const track = new Track(idManager.idNewTrack(this), dataTrack.name, dataTrack.duration, dataTrack.genres);       
     this._tracks.push(track);
@@ -27,7 +33,11 @@ class Album{
     return this._newTrackId++;
   }
   getTrackById(id){
-    return this._tracks.find(track => idManager.equalId('track', id, track.id));
+    const track = this._tracks.find(track => idManager.equalId('track', id, track.id));
+    if(track === undefined){
+      throw new NonexistentTrackError(id);
+    }
+    return track;
   }
 }
 

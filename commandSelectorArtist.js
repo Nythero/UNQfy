@@ -16,6 +16,11 @@ let commandSelectorArtist = {
 
   getArtists(unqfy) {
     return unqfy.getArtists();
+  },
+  
+  getTracksBy(unqfy, param){
+    const artistName = param[0];
+    return unqfy.getTracksMatchingArtist(artistName);
   }
 }
 

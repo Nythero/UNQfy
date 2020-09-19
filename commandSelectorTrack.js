@@ -8,6 +8,10 @@ let commandSelectorTrack = {
   getTrackById(unqfy, param){
     const id = parseInt(param[0]);
     return unqfy.getTrackById(id);
+  },
+  getTracksByGenre(unqfy, param){
+    const genres = param;
+    return unqfy.getTracksMatchingGenres(genres);
   }
 }
 

@@ -5,6 +5,9 @@ const Artist = require('./artist');
 const idManager = require('./idManager');
 const Album = require('./album');
 const Track = require('./track');
+const NonexistentArtistError = require('./nonexistentArtistError');
+const NonexistentAlbumError = require('./nonexistentAlbumError');
+const NonexistentTrackError = require('./nonexistentTrackError');
 
 class UNQfy {
   
@@ -49,9 +52,19 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
-    return this.getArtistById(artistId).addAlbum(albumData);
+    const artist = this.getArtistById(artistId);
+    try {
+      return artist.addAlbum(albumData);
+    }
+    catch (error) {
+      if (error instanceof TypeError){
+        return artist;
+      }
+      else{
+        throw error;
+      }
+    }   
   }
-
 
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
@@ -65,11 +78,36 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
-    return this.getAlbumById(albumId).addTrack(trackData);
+    const album = this.getAlbumById(albumId);
+    try {
+      return album.addTrack(trackData);
+    }
+    catch (error){
+      if (error instanceof TypeError){
+        return album;
+      }    
+      else {
+        throw error;
+      }
+    }
   }
 
   getArtistById(id) {
-    return this._artistas.find(a => idManager.equalId('artist', id, a.id));
+    const artist = this._artistas.find(a => idManager.equalId('artist', id, a.id));
+    try {
+      if (artist === undefined){
+        throw new NonexistentArtistError('id', id);
+      }
+    }
+    catch (error){
+      if (error instanceof NonexistentArtistError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
+    return artist;
   }
 
   getArtists() {
@@ -77,11 +115,44 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-    return this.getArtistById(id).getAlbumById(id);
+    const artist = this.getArtistById(id);
+    try {
+      return artist.getAlbumById(id);
+    }
+    catch (error){
+      if (error instanceof TypeError){
+        return artist;
+      }
+      else if (error instanceof NonexistentAlbumError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
+  }
+
+  search(name){
+    const matchingArtists = this._artistas.filter(artist => artist.matchOrElementsMatch('name', name));
+    return matchingArtists.flatMap(artist => artist.matchingElements('name', name));
   }
 
   getTrackById(id) {
-    return this.getAlbumById(id).getTrackById(id);
+    const album = this.getAlbumById(id);
+    try {
+      return album.getTrackById(id);
+    }
+    catch (error){
+      if (error instanceof TypeError){
+        return album;
+      }
+      else if (error instanceof NonexistentTrackError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
   }
 
   getPlaylistById(id) {
@@ -91,13 +162,32 @@ class UNQfy {
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
   getTracksMatchingGenres(genres) {
-
+    let tracks = [];
+    for (let i = 0; i < genres.length; i++){
+      tracks = tracks.concat(this._artistas.flatMap(artist => artist.matchingElements('genres', genres[i])));
+    }
+    return tracks;
   }
 
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
+    const artist = this._artistas.find(artista => artistName == artista.name);
 
+    try {
+      if (artist === undefined){
+        throw new NonexistentArtistError('name', artistName);
+      }
+    }
+    catch (error){
+      if (error instanceof NonexistentArtistError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
+    return artist.albums.flatMap(album => album.tracks);
   }
 
 
