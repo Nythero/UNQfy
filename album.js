@@ -58,6 +58,10 @@ class Album extends MatchingObject{
     }
     return track;
   }
+  addIfMatchName(dictionary, name){
+    super.addIfMatch(dictionary.albums, 'name', name);
+    this.tracks.forEach(track => track.addIfMatchName(dictionary, name));
+  }
 }
 
 module.exports = Album;

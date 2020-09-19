@@ -154,9 +154,16 @@ class UNQfy {
     }
   }
 
-  search(name){
-    const matchingArtists = this._artistas.filter(artist => artist.matchOrElementsMatch('name', name));
-    return matchingArtists.flatMap(artist => artist.matchingElements('name', name));
+  searchByName(name){
+    const matchs = {
+      artists: [],
+      albums:[],
+      tracks:[],
+      playlists:[]
+    }
+    this._artistas.forEach(artist => artist.addIfMatchName(matchs, name));
+    //this._playlists.forEach(playlist => playlist.addIfMatch(matchs,name));
+    return matchs;
   }
 
   getTrackById(id) {
@@ -184,9 +191,15 @@ class UNQfy {
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
   getTracksMatchingGenres(genres) {
+    const tracks = [];
+    this._getTracks().forEach(track => track.addIfMatchGenres(tracks, genres));
+    return tracks;
+  }
+
+  _getTracks(){
     let tracks = [];
-    for (let i = 0; i < genres.length; i++){
-      tracks = tracks.concat(this._artistas.flatMap(artist => artist.matchingElements('genres', genres[i])));
+    for (let x = 0; x < this._artistas.length; x ++){
+      tracks = tracks.concat(this.getTracksMatchingArtist(this._artistas[x].name));
     }
     return tracks;
   }
