@@ -1,7 +1,9 @@
 const Album = require('./album');
 const idManager = require('./idManager');
-const NonexistentAlbumError = require('./nonexistentAlbumError');
 const MatchingObject = require('./matchingObject');
+
+//Errores
+const NonexistentAlbumError = require('./error/nonexistentAlbumError');
 
 class Artist extends MatchingObject{
   constructor(id, name, country) {

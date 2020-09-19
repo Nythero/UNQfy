@@ -5,9 +5,12 @@ const Artist = require('./artist');
 const idManager = require('./idManager');
 const Album = require('./album');
 const Track = require('./track');
-const NonexistentArtistError = require('./nonexistentArtistError');
-const NonexistentAlbumError = require('./nonexistentAlbumError');
-const NonexistentTrackError = require('./nonexistentTrackError');
+
+//Errores
+const NonexistentArtistError = require('./error/nonexistentArtistError');
+const NonexistentAlbumError = require('./error/nonexistentAlbumError');
+const NonexistentTrackError = require('./error/nonexistentTrackError');
+const ArtistNameTakenError = require('./error/artistNameTakenError');
 
 class UNQfy {
   
@@ -26,9 +29,26 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
+    try {
+      this._validarNombreArtista(artistData.name);
+    }
+    catch (error){
+      if (error instanceof ArtistNameTakenError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
     const artistaNuevo = new Artist(idManager.idNewArtist(this), artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
     return artistaNuevo;
+  }
+
+  _validarNombreArtista(name){
+    if(this._artistas.some(artist => artist.name == name)){
+      throw new ArtistNameTakenError(name);
+    }
   }
 
   // id: id del artista a eliminar
@@ -65,6 +85,8 @@ class UNQfy {
       }
     }   
   }
+
+  
 
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
