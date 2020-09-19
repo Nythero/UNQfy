@@ -1,7 +1,10 @@
 const Track = require('./track');
 const idManager = require('./idManager');
-const NonexistentTrackError = require('./nonexistentTrackError');
 const MatchingObject = require('./matchingObject');
+
+//Errores
+const NonexistentTrackError = require('./error/nonexistentTrackError');
+const TrackAlreadyOnAlbumError = require('./error/trackAlreadyOnAlbumError');
 
 class Album extends MatchingObject{
   constructor(id, name, year){
@@ -25,9 +28,25 @@ class Album extends MatchingObject{
     return this._tracks;
   }
   addTrack(dataTrack){
+    try {
+      this._validarTrack(dataTrack);
+    }
+    catch (error){
+      if (error instanceof TrackAlreadyOnAlbumError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
     const track = new Track(idManager.idNewTrack(this), dataTrack.name, dataTrack.duration, dataTrack.genres);       
     this._tracks.push(track);
     return track;
+  }
+  _validarTrack(dataTrack){
+    if (this._tracks.some(track => track.name == dataTrack.name)){
+      throw new TrackAlreadyOnAlbumError(dataTrack.name, this._name);
+    }
   }
   newTrackId(){
     return this._newTrackId++;
@@ -38,6 +57,10 @@ class Album extends MatchingObject{
       throw new NonexistentTrackError(id);
     }
     return track;
+  }
+  addIfMatchName(dictionary, name){
+    super.addIfMatch(dictionary.albums, 'name', name);
+    this.tracks.forEach(track => track.addIfMatchName(dictionary, name));
   }
 }
 

@@ -20,8 +20,15 @@ class Track extends MatchingObject{
   get genres(){
     return this._genres;
   }
-  elementsThatMatch(field, name){
-    return [];
+  addIfMatchName(dictionary, name){
+    super.addIfMatch(dictionary.tracks, 'name', name);
+  }
+  addIfMatchGenres(array, genres){
+    for (let i = 0; i < genres.length; i++){
+      if(!array.includes(this)){
+        super.addIfMatch(array, 'genres', genres[i])
+      }  
+    }
   }
 }
 

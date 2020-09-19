@@ -5,9 +5,12 @@ const Artist = require('./artist');
 const idManager = require('./idManager');
 const Album = require('./album');
 const Track = require('./track');
-const NonexistentArtistError = require('./nonexistentArtistError');
-const NonexistentAlbumError = require('./nonexistentAlbumError');
-const NonexistentTrackError = require('./nonexistentTrackError');
+
+//Errores
+const NonexistentArtistError = require('./error/nonexistentArtistError');
+const NonexistentAlbumError = require('./error/nonexistentAlbumError');
+const NonexistentTrackError = require('./error/nonexistentTrackError');
+const ArtistNameTakenError = require('./error/artistNameTakenError');
 
 class UNQfy {
   
@@ -26,9 +29,26 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
+    try {
+      this._validarNombreArtista(artistData.name);
+    }
+    catch (error){
+      if (error instanceof ArtistNameTakenError){
+        return error.message;
+      }
+      else {
+        throw error;
+      }
+    }
     const artistaNuevo = new Artist(idManager.idNewArtist(this), artistData.name, artistData.country);
     this._artistas.push(artistaNuevo);
     return artistaNuevo;
+  }
+
+  _validarNombreArtista(name){
+    if(this._artistas.some(artist => artist.name == name)){
+      throw new ArtistNameTakenError(name);
+    }
   }
 
   // id: id del artista a eliminar
@@ -65,6 +85,8 @@ class UNQfy {
       }
     }   
   }
+
+  
 
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
@@ -132,9 +154,16 @@ class UNQfy {
     }
   }
 
-  search(name){
-    const matchingArtists = this._artistas.filter(artist => artist.matchOrElementsMatch('name', name));
-    return matchingArtists.flatMap(artist => artist.matchingElements('name', name));
+  searchByName(name){
+    const matchs = {
+      artists: [],
+      albums:[],
+      tracks:[],
+      playlists:[]
+    }
+    this._artistas.forEach(artist => artist.addIfMatchName(matchs, name));
+    //this._playlists.forEach(playlist => playlist.addIfMatch(matchs,name));
+    return matchs;
   }
 
   getTrackById(id) {
@@ -162,9 +191,15 @@ class UNQfy {
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
   getTracksMatchingGenres(genres) {
+    const tracks = [];
+    this._getTracks().forEach(track => track.addIfMatchGenres(tracks, genres));
+    return tracks;
+  }
+
+  _getTracks(){
     let tracks = [];
-    for (let i = 0; i < genres.length; i++){
-      tracks = tracks.concat(this._artistas.flatMap(artist => artist.matchingElements('genres', genres[i])));
+    for (let x = 0; x < this._artistas.length; x ++){
+      tracks = tracks.concat(this.getTracksMatchingArtist(this._artistas[x].name));
     }
     return tracks;
   }
