@@ -69,7 +69,15 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
+    console.debug(albumId);
     return this.getAlbumById(albumId).addTrack(trackData);
+  }
+
+  // id: id del track a eliminar
+  deleteTrack(id) {
+    /* Elimina de unqfy el track con el id indicado */
+    const tracks = this.getAlbumById(id).deleteTrack(id);
+    return tracks;
   }
 
   getArtistById(id) {

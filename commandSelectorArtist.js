@@ -16,7 +16,7 @@ let commandSelectorArtist = {
 
   getArtists(unqfy) {
     return unqfy.getArtists();
-  }
-}
+  },
+};
 
 module.exports = commandSelectorArtist;

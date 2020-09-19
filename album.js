@@ -23,6 +23,10 @@ class Album{
     this._tracks.push(track);
     return track;
   }
+  deleteTrack(id) {
+    this._tracks = this._tracks.filter(a => a.id !== id);
+    return this._tracks;
+  }
   newTrackId(){
     return this._newTrackId++;
   }
