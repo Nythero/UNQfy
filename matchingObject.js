@@ -4,7 +4,17 @@ class MatchingObject {
   }
   //Indica si el field del objeto actual contiene el name dado	
   match(field,name){
-    return this[field].includes(name);
+    try {
+      return this[field].includes(name);
+    }
+    catch (error){
+      if  (error instanceof TypeError){
+        return false;
+      }
+      else {
+        throw error;
+      }
+    }
   }
   //Devuelve todos los objetos en [_elemsIndex] que hacen match o tienen un objeto que hace match
   elementsThatMatch(field, name){
