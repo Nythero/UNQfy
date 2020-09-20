@@ -30,6 +30,9 @@ class Track extends MatchingObject{
       }  
     }
   }
+  hasGenre(aGenre) {
+    return this._genres.some((g) => g === aGenre);
+  }
 }
 
 module.exports = Track;

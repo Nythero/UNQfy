@@ -4,16 +4,19 @@ const Artist = require("./artist");
 const idManager = require("./idManager");
 const Album = require("./album");
 const Track = require("./track");
+const Playlist = require("./playlist");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
 const NonexistentAlbumError = require("./error/nonexistentAlbumError");
 const NonexistentTrackError = require("./error/nonexistentTrackError");
 const ArtistNameTakenError = require("./error/artistNameTakenError");
+const NonexistentPlaylistError = require("./error/nonexistentPlaylistError");
 
 class UNQfy {
   constructor() {
-    this._artistas = [];
+    this._playlists = [];
+    this._artistas = [];    
     this._newArtistId = 1;
   }
 
@@ -190,7 +193,13 @@ class UNQfy {
     return this.getAlbumById(albumId).tracks;
   }
 
-  getPlaylistById(id) {}
+  getPlaylistById(id) {
+    const playlist = this._playlists.find((p) => p.id === id);
+    if (playlist === undefined) {
+      throw new NonexistentPlaylistError("id", id);
+    }
+    return playlist;
+  }
 
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
@@ -215,7 +224,7 @@ class UNQfy {
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
-    const artist = this._artistas.find((artista) => artistName == artista.name);
+    const artist = this._artistas.find((artista) => artistName === artista.name);
 
     try {
       if (artist === undefined) {
@@ -242,7 +251,32 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
     */
-    
+    const playlist = new Playlist(name);
+    this._artistas.forEach(artist => {
+      artist.albums.forEach(album => {
+        album.tracks.forEach(track => {
+          if((playlist.duration() + track.duration) <= maxDuration) {
+            if(genresToInclude.some(g => track.hasGenre(g))) {
+              playlist.addTrack(track);
+            }              
+          }
+          else return;
+        });
+      });
+    });
+    this._playlists.push(playlist);
+    return playlist;
+  }
+
+  // id: id del artista a eliminar
+  deletePlaylist(id) {
+    /* Elimina de unqfy la playlist con el id indicado */
+    this._playlists = this._playlists.filter((p) => p.id !== id);
+    return this._playlists;
+  }
+
+  getPlaylists() {
+    return this._playlists;
   }
 
   save(filename) {
@@ -253,7 +287,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, { encoding: "utf-8" });
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Album, Track];
+    const classes = [UNQfy, Artist, Album, Track, Playlist];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 

@@ -1,6 +1,6 @@
 class NonexistentCommandError extends Error{
   constructor(command){
-    super("El comando " + command + " no existe.");
+    super(`El comando ${command} no existe.`);
     this.name = "NonexistenCommandError";
   }
 }

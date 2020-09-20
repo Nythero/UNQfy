@@ -53,7 +53,6 @@ function saveUNQfy(unqfy, filename = "data.json") {
 const dataFromArgs = args => args.slice(3, args.length);
 
 function main() {
-  console.debug
   const command = process.argv[2];
   try {
     commandSelector.validarCommand(command);
