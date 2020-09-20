@@ -8,11 +8,23 @@
 Para el uso de unqfy se debe usar la sintaxis
 node main.js [comando] [parametros]
 
-Los comandos disponibles son:
+Los comandos disponibles con sus respectivos parámetros son:
 * addArtist [nombre] [pais]
-* deleteArtist [id del artista]
-* getArtistById [id del artista]
+* deleteArtist [artistId]
+* addAlbum [artistId] [nombre] [año]
+* deleteAlbum [albumId]
+* addTrack [albumId] [nombre] [duracion] [generos como strings] 
+* deleteTrack [trackId]
+* getArtistById [artistId]
 * getArtists
+* getAlbumById [albumId]
+* getAlbumsByArtist [artistId]
+* search [nombre]
+* getTrackById [trackId]
+* getTracksByAlbum [albumId]
+* createPlaylist [nombre] [generos] [duracion]
+* deletePlaylist [playlistId]
+* getPlaylists
 
 ## Diagrama UML
 [Link al diagrama UML](https://drive.google.com/file/d/1uwzQhLygGmY4_a6f51_WZdYxhqfI1mBD/view?usp=sharing)

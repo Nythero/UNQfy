@@ -1,4 +1,5 @@
 let IdManager = {
+  _playlistId: 1,
   _bytesIniciales : {
     artist: Math.pow(2,11),
     album: Math.pow(2,6),
@@ -12,6 +13,11 @@ let IdManager = {
   },
   idNewTrack(album){
     return album.id + (album.newTrackId()) * this._bytesIniciales['track'];
+  },
+  idNewPlaylist() {
+    let playlistId = this._playlistId;
+    this._playlistId += 1;
+    return playlistId;
   },
   _getId(field,id){
     return id - (id % this._bytesIniciales[field]);

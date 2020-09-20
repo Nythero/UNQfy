@@ -51,7 +51,7 @@ class Album extends MatchingObject {
     return this._tracks;
   }
   _validarTrack(dataTrack) {
-    if (this._tracks.some((track) => track.name == dataTrack.name)) {
+    if (this._tracks.some((track) => track.name === dataTrack.name)) {
       throw new TrackAlreadyOnAlbumError(dataTrack.name, this._name);
     }
   }

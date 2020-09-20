@@ -1,6 +1,6 @@
 class NonexistentTrackError extends Error{
   constructor(trackId){
-    super('Nose pudo completar la accion, el track con id ' + trackId + ' no existe');
+    super(`No se pudo completar la accion, el track con id ${trackId} no existe`);
     this.name = 'NonexistentTrackError';
   }
 }
