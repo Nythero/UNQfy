@@ -155,6 +155,10 @@ class UNQfy {
     }
   }
 
+  getAlbumsByArtist(artistId) {
+    return this.getArtistById(artistId).albums;
+  }
+
   searchByName(name) {
     const matchs = {
       artists: [],
@@ -180,6 +184,10 @@ class UNQfy {
         throw error;
       }
     }
+  }
+
+  getTracksByAlbum(albumId) {
+    return this.getAlbumById(albumId).tracks;
   }
 
   getPlaylistById(id) {}
@@ -233,7 +241,8 @@ class UNQfy {
       * una propiedad name (string)
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
-  */
+    */
+    
   }
 
   save(filename) {
