@@ -170,7 +170,7 @@ class UNQfy {
       playlists: [],
     };
     this._artistas.forEach((artist) => artist.addIfMatchName(matchs, name));
-    //this._playlists.forEach(playlist => playlist.addIfMatch(matchs,name));
+    this._playlists.forEach(playlist => playlist.addIfMatchName(matchs,name));
     return matchs;
   }
 
@@ -254,11 +254,11 @@ class UNQfy {
     const playlist = new Playlist(name);
     artist_loop:
     for(let i = 0; i < this._artistas.length; i++) {
-      let albums = this._artistas[i].albums;
+      const albums = this._artistas[i].albums;
       for(let j = 0; j < albums.length; j++) {
-        let tracks = albums[j].tracks;
+        const tracks = albums[j].tracks;
         for(let k = 0; k < tracks.length; k++) {
-          let track = tracks[k];          
+          const track = tracks[k];          
           if((playlist.duration() + track.duration) <= maxDuration) {
             if(genresToInclude.some(g => track.hasGenre(g))) {
               playlist.addTrack(track);

@@ -26,7 +26,7 @@ class Track extends MatchingObject{
   addIfMatchGenres(array, genres){
     for (let i = 0; i < genres.length; i++){
       if(!array.includes(this)){
-        super.addIfMatch(array, 'genres', genres[i])
+        super.addIfMatch(array, 'genres', genres[i]);
       }  
     }
   }

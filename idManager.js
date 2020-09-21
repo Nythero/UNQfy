@@ -1,4 +1,4 @@
-let IdManager = {
+const IdManager = {
   _playlistId: 1,
   _bytesIniciales : {
     artist: Math.pow(2,11),
@@ -6,16 +6,16 @@ let IdManager = {
     track: Math.pow(2,0)
   },
   idNewArtist(unqfy){
-    return (unqfy.newArtistId) * this._bytesIniciales['artist'];
+    return (unqfy.newArtistId) * this._bytesIniciales.artist;
   },
   idNewAlbum(artist){
-    return artist.id + (artist.newAlbumId()) * this._bytesIniciales['album'];
+    return artist.id + (artist.newAlbumId()) * this._bytesIniciales.album;
   },
   idNewTrack(album){
-    return album.id + (album.newTrackId()) * this._bytesIniciales['track'];
+    return album.id + (album.newTrackId()) * this._bytesIniciales.track;
   },
   idNewPlaylist() {
-    let playlistId = this._playlistId;
+    const playlistId = this._playlistId;
     this._playlistId += 1;
     return playlistId;
   },
@@ -25,6 +25,6 @@ let IdManager = {
   equalId(field, firstId, secondId){
     return this._getId(field, firstId) ===  this._getId(field, secondId);
   }
-}
+};
 
 module.exports = IdManager;
