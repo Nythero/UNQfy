@@ -252,18 +252,23 @@ class UNQfy {
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
     */
     const playlist = new Playlist(name);
-    this._artistas.forEach(artist => {
-      artist.albums.forEach(album => {
-        album.tracks.forEach(track => {
+    artist_loop:
+    for(let i = 0; i < this._artistas.length; i++) {
+      let albums = this._artistas[i].albums;
+      for(let j = 0; j < albums.length; j++) {
+        let tracks = albums[j].tracks;
+        for(let k = 0; k < tracks.length; k++) {
+          let track = tracks[k];          
           if((playlist.duration() + track.duration) <= maxDuration) {
             if(genresToInclude.some(g => track.hasGenre(g))) {
               playlist.addTrack(track);
+              if(playlist.duration() === maxDuration)
+                break artist_loop;
             }              
           }
-          else return;
-        });
-      });
-    });
+        }
+      }
+    }
     this._playlists.push(playlist);
     return playlist;
   }
