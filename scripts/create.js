@@ -44,6 +44,10 @@ const tracks = [
   { albumId: 20544, name: "Self Esteem", dur: 320, genres: ["Punk Rock"] },
 ];
 
+const usuarios = [
+  { username: "Nico" }
+];
+
 const createArtists = () => {
   artists.forEach((a) => {
     run(`node main.js addArtist "${a.name}" "${a.country}"`);
@@ -59,6 +63,12 @@ const createAlbums = () => {
 const createTracks = () => {
   tracks.forEach((t) => {
     run(`node main.js addTrack ${t.albumId} "${t.name}" ${t.dur} ${t.genres.reduce((acc, cur) => acc.concat(`"${cur}"` + " "), "")}`);
+  });
+};
+
+const createUsuarios = () => {
+  usuarios.forEach((u) => {
+    run(`node main.js createUsuario "${u.username}"`);
   });
 };
 
@@ -79,3 +89,4 @@ const run = (cmd) => {
 createArtists();
 createAlbums();
 createTracks();
+createUsuarios();

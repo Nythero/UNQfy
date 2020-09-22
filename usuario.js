@@ -1,18 +1,24 @@
+const idManager = require("./idManager");
 class Usuario {
-  constructor(){
+  constructor(username){
+    this._username = username;
     this._tracksListened = {};
   }
-  tracksListened(){
-    return this._tracksListened.keys();
+  get username(){
+    return this._username;
   }
-  timesListened(trackName){
-    const times = this._tracksListened[trackName];
+  tracksListened(){
+    return Object.keys(this._tracksListened);
+  }
+  timesListened(trackId){
+    const times = this._tracksListened[trackId];
     return (times === undefined)? 0 : times;
   }
   listenTrack(track){
-    const trackName = track.name;
+    track.listen();
+    const trackId = track.id;
     const auxObject = {};
-    auxObject[trackName] = this.timesListened(trackName) + 1;
+    auxObject[trackId] = this.timesListened(trackId) + 1;
     Object.assign(this._tracksListened, auxObject);
   }
 }

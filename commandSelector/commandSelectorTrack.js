@@ -20,6 +20,10 @@ let commandSelectorTrack = {
   getTracksByAlbum(unqfy, idParam) {
     let albumId = parseInt(idParam[0]);
     return unqfy.getTracksByAlbum(albumId);
+  },
+  trackTimesListened(unqfy, idParam) {
+    let trackId = parseInt(idParam[0]);
+    return unqfy.trackTimesListened(trackId);
   }
 }
 

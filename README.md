@@ -25,6 +25,12 @@ Los comandos disponibles con sus respectivos parámetros son:
 * createPlaylist [nombre] [generos] [duracion]
 * deletePlaylist [playlistId]
 * getPlaylists
+* createUsuario [username]
+* getUsuario [username]
+* tracksListened [username]
+* trackTimesListenedByUser [trackId] [username]
+* listenTrack [trackId] [username]
+* trackTimesListened [trackId]
 
 ## Diagrama UML
 [Link al diagrama UML](https://drive.google.com/file/d/1uwzQhLygGmY4_a6f51_WZdYxhqfI1mBD/view?usp=sharing)

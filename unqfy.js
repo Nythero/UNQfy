@@ -5,6 +5,7 @@ const idManager = require("./idManager");
 const Album = require("./album");
 const Track = require("./track");
 const Playlist = require("./playlist");
+const Usuario = require("./usuario");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
@@ -12,11 +13,14 @@ const NonexistentAlbumError = require("./error/nonexistentAlbumError");
 const NonexistentTrackError = require("./error/nonexistentTrackError");
 const ArtistNameTakenError = require("./error/artistNameTakenError");
 const NonexistentPlaylistError = require("./error/nonexistentPlaylistError");
+const UserNameTakenError = require("./error/userNameTakenError");
+const NonexistentUserError = require("./error/nonexistentUserError");
 
 class UNQfy {
   constructor() {
     this._playlists = [];
-    this._artistas = [];    
+    this._artistas = [];
+    this._usuarios = [];  
     this._newArtistId = 1;
   }
 
@@ -284,6 +288,70 @@ class UNQfy {
     return this._playlists;
   }
 
+  // username: nombre del usuario (string)
+  // retorna: el nuevo usuario creado
+  createUsuario(username) {
+    /* Crea un artista y lo agrega a unqfy. */
+    try {
+      this._validarUsername(username);
+    } catch (error) {
+      if (error instanceof UserNameTakenError) {
+        return error.message;
+      } else {
+        throw error;
+      }
+    }
+    const usuarioNuevo = new Usuario(username);
+    this._usuarios.push(usuarioNuevo);
+    return usuarioNuevo;
+  }
+
+  _validarUsername(username) {
+    if (this._usuarios.some((u) => u.username === username)) {
+      throw new UserNameTakenError(username);
+    }
+  }
+
+  getUsuario(username) {
+    const user = this._usuarios.find((u) => u.username.toLowerCase() === username.toLowerCase());
+
+    try {
+      if (user === undefined) {
+        throw new NonexistentUserError(username);
+      }
+    } catch (error) {
+      if (error instanceof NonexistentUserError) {
+        return error.message;
+      } else {
+        throw error;
+      }
+    }
+    return user;
+  }
+
+  tracksListened(username) {
+    const user = this.getUsuario(username);
+    const listenedTrackIds = user.tracksListened();
+    return listenedTrackIds.map(trackId => this.getTrackById(trackId).name);
+  }
+
+  trackTimesListenedByUser(trackId, username) {
+    const user = this.getUsuario(username);
+    return user.timesListened(trackId);
+  }
+
+  listenTrack(trackId, username) {
+    const user = this.getUsuario(username);
+    const track = this.getTrackById(trackId);
+    user.listenTrack(track);
+    return track;
+  }
+
+  trackTimesListened(trackId) {
+    const track = this.getTrackById(trackId);
+    return track.timesListened;
+  }
+
   save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
@@ -292,7 +360,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, { encoding: "utf-8" });
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Album, Track, Playlist];
+    const classes = [UNQfy, Artist, Album, Track, Playlist, Usuario];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 
