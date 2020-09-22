@@ -30,6 +30,9 @@ class Playlist extends MatchingObject {
   duration() {
     return this._tracks.reduce((acc, t) => acc + t.duration, 0);
   }
+  addIfMatchName(dictionary, name){
+    super.addIfMatch(dictionary.playlists, 'name', name);
+  }
 }
 
 module.exports = Playlist;

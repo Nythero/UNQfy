@@ -2,6 +2,7 @@ const commandSelectorArtist = require("./commandSelectorArtist");
 const commandSelectorAlbum = require("./commandSelectorAlbum");
 const commandSelectorTrack = require("./commandSelectorTrack");
 const commandSelectorPlaylist = require("./commandSelectorPlaylist");
+const commandSelectorUsuario = require("./commandSelectorUsuario");
 const commandSelectorDefault = require("./commandSelectorDefault");
 
 //Errores
@@ -15,6 +16,7 @@ const commandSelector = {
     commandSelectorAlbum,
     commandSelectorTrack,
     commandSelectorPlaylist,
+    commandSelectorUsuario,
     commandSelectorDefault,
   ],
   select(command) {

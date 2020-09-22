@@ -70,6 +70,6 @@ function main() {
   const unqfy = getUNQfy();
   console.debug(commandSelector.select(command)(unqfy, parameters));
   saveUNQfy(unqfy);
-};
+}
 
 main();
