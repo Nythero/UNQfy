@@ -6,6 +6,7 @@ const Album = require("./album");
 const Track = require("./track");
 const Playlist = require("./playlist");
 const Usuario = require("./usuario");
+const thisIsCreator = require("./thisIsCreator");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
@@ -350,6 +351,11 @@ class UNQfy {
   trackTimesListened(trackId) {
     const track = this.getTrackById(trackId);
     return track.timesListened;
+  }
+
+  getThisIs(artistId){
+    const artist = this.getArtistById(artistId);
+    return thisIsCreator.createThisIs(artist);
   }
 
   save(filename) {
