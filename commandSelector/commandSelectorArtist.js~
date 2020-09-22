@@ -24,7 +24,7 @@ let commandSelectorArtist = {
   },
   getThisIs(unqfy, param){
     const artistId = param[0];
-    return unqfy.getThisIs(artistId);
+    return unqfy.
   }
 }
 
