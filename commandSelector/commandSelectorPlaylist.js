@@ -1,19 +1,19 @@
 let commandSelectorPlaylist = {
-  createPlaylist(unqfy, dataPlaylist) {
+  createPlaylist : (unqfy, dataPlaylist) => {
     const name = dataPlaylist[0];
     const duration = parseInt(dataPlaylist[1]);
     const genres = dataPlaylist.slice(2);
     return unqfy.createPlaylist(name, genres, duration);
   },
-  getPlaylistById(unqfy, idParam) {
+  getPlaylistById : (unqfy, idParam) => {
     const id = parseInt(idParam[0]);
     return unqfy.getPlaylistById(id);
   },
-  deletePlaylist(unqfy, idParam) {
+  deletePlaylist : (unqfy, idParam) => {
     let id = parseInt(idParam[0]);
     return unqfy.deletePlaylist(id);
   },
-  getPlaylists(unqfy) {
+  getPlaylists : (unqfy) => {
     return unqfy.getPlaylists();
   },
 };

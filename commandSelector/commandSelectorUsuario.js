@@ -1,22 +1,22 @@
 let commandSelectorUsuario = {
-  createUsuario(unqfy, dataUsuario) {
+  createUsuario : (unqfy, dataUsuario) => {
     const username = dataUsuario[0];
     return unqfy.createUsuario(username);
   },
-  getUsuario(unqfy, dataUsuario) {
+  getUsuario : (unqfy, dataUsuario) => {
     const username = dataUsuario[0];
     return unqfy.getUsuario(username);
   },
-  tracksListened(unqfy, dataUsuario) {
+  tracksListened : (unqfy, dataUsuario) => {
     const usernane = dataUsuario[0];
     return unqfy.tracksListened(usernane);
   },
-  trackTimesListenedByUser(unqfy, params) {
+  trackTimesListenedByUser : (unqfy, params) => {
     const trackId = parseInt(params[0]);
     const username = params[1];
     return unqfy.trackTimesListenedByUser(trackId, username);
   },
-  listenTrack(unqfy, params) {
+  listenTrack : (unqfy, params) => {
     const trackId = parseInt(params[0]);
     const username = params[1];
     return unqfy.listenTrack(trackId, username);

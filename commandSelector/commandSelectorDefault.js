@@ -1,5 +1,5 @@
 let commandSelectorDefault = {
-  search(unqfy, args){
+  search : (unqfy, args) => {
     const name = args[0];
     return unqfy.searchByName(name);
   }
