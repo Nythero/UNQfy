@@ -28,15 +28,7 @@ class Album extends MatchingObject {
     return this._tracks;
   }
   addTrack(dataTrack) {
-    try {
-      this._validarTrack(dataTrack);
-    } catch (error) {
-      if (error instanceof TrackAlreadyOnAlbumError) {
-        return error.message;
-      } else {
-        throw error;
-      }
-    }
+    this._validarTrack(dataTrack);
     const track = new Track(
       idManager.idNewTrack(this),
       dataTrack.name,
