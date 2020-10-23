@@ -284,6 +284,16 @@ class UNQfy {
     return thisIsCreator.createThisIs(artist);
   }
 
+  getAlbumsForArtist(artistName){
+    const artist = this._artistas.find((artista) => artistName === artista.name);
+
+    if (artist === undefined) {
+      throw new NonexistentArtistError("name", artistName);
+    } 
+
+    return artist.albums.map(album => album.name);
+  }
+
   save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
