@@ -7,6 +7,7 @@ const Track = require("./track");
 const Playlist = require("./playlist");
 const Usuario = require("./usuario");
 const thisIsCreator = require("./thisIsCreator");
+const unqfyRequester = require("./unqfyRequester");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
@@ -292,6 +293,33 @@ class UNQfy {
     } 
 
     return artist.albums.map(album => album.name);
+  }
+
+  populateAlbumsForArtist(artistName){
+    unqfyRequester.requestSpotify('https://api.spotify.com/v1/search',
+      {
+	q:artistName,
+	type: 'artist'
+      }
+    )
+    .then(message => {
+      const artists  = message.artists.items;
+      const artistId = artists[0].id;
+      return unqfyRequester.requestSpotify('https://api.spotify.com/v1/artists/'+ artistId +'/albums', {})
+    })
+    .then(message => {
+      const albums = message.items;
+      const albumsData = albums.map(album => {
+        return {
+	  name : album.name,
+	  year : album.release_date.substring(0, 4)
+	};
+      })
+      const artist = this._artistas.find(artista => artista.name == artistName);
+      albumsData.forEach(albumData => artist.addAlbum(albumData));
+      this.save("data.json");
+    })
+    .catch(error => console.log(error.message));
   }
 
   save(filename) {

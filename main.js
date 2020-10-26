@@ -57,12 +57,12 @@ function main() {
   const parameters = dataFromArgs(process.argv);
   const unqfy = getUNQfy();
   try{
-    commandSelector.select(command)(unqfy, parameters);
+    console.log(commandSelector.select(command)(unqfy, parameters));
   }
   catch(error){
     console.log(error.message);
   }
-  saveUNQfy(unqfy);
+  //saveUNQfy(unqfy);
 }
 
 main();
