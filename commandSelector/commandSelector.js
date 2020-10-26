@@ -20,12 +20,13 @@ const commandSelector = {
     commandSelectorDefault,
   ],
   select(command) {
+    this._validarCommand(command);
     const selector = this._commandSelectors.find((cs) =>
       cs.hasOwnProperty(command)
     );
     return selector[command];
   },
-  validarCommand(command) {
+  _validarCommand(command) {
     if (!this._commandSelectors.some((cs) => cs.hasOwnProperty(command))) {
       throw new NonexistentCommandError(command);
     }

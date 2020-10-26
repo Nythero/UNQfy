@@ -7,6 +7,7 @@ const Track = require("./track");
 const Playlist = require("./playlist");
 const Usuario = require("./usuario");
 const thisIsCreator = require("./thisIsCreator");
+const unqfyRequester = require("./unqfyRequester");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
@@ -35,15 +36,6 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
-    try {
-      this._validarNombreArtista(artistData.name);
-    } catch (error) {
-      if (error instanceof ArtistNameTakenError) {
-        return error.message;
-      } else {
-        throw error;
-      }
-    }
     const artistaNuevo = new Artist(
       idManager.idNewArtist(this),
       artistData.name,
@@ -77,15 +69,7 @@ class UNQfy {
      - una propiedad year (number)
   */
     const artist = this.getArtistById(artistId);
-    try {
-      return artist.addAlbum(albumData);
-    } catch (error) {
-      if (error instanceof TypeError) {
-        return artist;
-      } else {
-        throw error;
-      }
-    }
+    return artist.addAlbum(albumData);
   }
 
   // id: id del album a eliminar
@@ -108,15 +92,7 @@ class UNQfy {
       - una propiedad genres (lista de strings)
   */
     const album = this.getAlbumById(albumId);
-    try {
-      return album.addTrack(trackData);
-    } catch (error) {
-      if (error instanceof TypeError) {
-        return album;
-      } else {
-        throw error;
-      }
-    }
+    return album.addTrack(trackData);
   }
 
   // id: id del track a eliminar
@@ -130,16 +106,8 @@ class UNQfy {
     const artist = this._artistas.find((a) =>
       idManager.equalId("artist", id, a.id)
     );
-    try {
-      if (artist === undefined) {
+    if (artist === undefined) {
         throw new NonexistentArtistError("id", id);
-      }
-    } catch (error) {
-      if (error instanceof NonexistentArtistError) {
-        return error.message;
-      } else {
-        throw error;
-      }
     }
     return artist;
   }
@@ -150,17 +118,7 @@ class UNQfy {
 
   getAlbumById(id) {
     const artist = this.getArtistById(id);
-    try {
-      return artist.getAlbumById(id);
-    } catch (error) {
-      if (error instanceof TypeError) {
-        return artist;
-      } else if (error instanceof NonexistentAlbumError) {
-        return error.message;
-      } else {
-        throw error;
-      }
-    }
+    return artist.getAlbumById(id);
   }
 
   getAlbumsByArtist(artistId) {
@@ -181,17 +139,7 @@ class UNQfy {
 
   getTrackById(id) {
     const album = this.getAlbumById(id);
-    try {
-      return album.getTrackById(id);
-    } catch (error) {
-      if (error instanceof TypeError) {
-        return album;
-      } else if (error instanceof NonexistentTrackError) {
-        return error.message;
-      } else {
-        throw error;
-      }
-    }
+    return album.getTrackById(id);
   }
 
   getTracksByAlbum(albumId) {
@@ -231,17 +179,10 @@ class UNQfy {
   getTracksMatchingArtist(artistName) {
     const artist = this._artistas.find((artista) => artistName === artista.name);
 
-    try {
-      if (artist === undefined) {
-        throw new NonexistentArtistError("name", artistName);
-      }
-    } catch (error) {
-      if (error instanceof NonexistentArtistError) {
-        return error.message;
-      } else {
-        throw error;
-      }
+    if (artist === undefined) {
+      throw new NonexistentArtistError("name", artistName);
     }
+
     return artist.albums.flatMap((album) => album.tracks);
   }
 
@@ -293,15 +234,8 @@ class UNQfy {
   // retorna: el nuevo usuario creado
   createUsuario(username) {
     /* Crea un artista y lo agrega a unqfy. */
-    try {
-      this._validarUsername(username);
-    } catch (error) {
-      if (error instanceof UserNameTakenError) {
-        return error.message;
-      } else {
-        throw error;
-      }
-    }
+    this._validarUsername(username);
+
     const usuarioNuevo = new Usuario(username);
     this._usuarios.push(usuarioNuevo);
     return usuarioNuevo;
@@ -316,17 +250,10 @@ class UNQfy {
   getUsuario(username) {
     const user = this._usuarios.find((u) => u.username.toLowerCase() === username.toLowerCase());
 
-    try {
-      if (user === undefined) {
+    if (user === undefined) {
         throw new NonexistentUserError(username);
-      }
-    } catch (error) {
-      if (error instanceof NonexistentUserError) {
-        return error.message;
-      } else {
-        throw error;
-      }
     }
+
     return user;
   }
 
@@ -356,6 +283,43 @@ class UNQfy {
   getThisIs(artistId){
     const artist = this.getArtistById(artistId);
     return thisIsCreator.createThisIs(artist);
+  }
+
+  getAlbumsForArtist(artistName){
+    const artist = this._artistas.find((artista) => artistName === artista.name);
+
+    if (artist === undefined) {
+      throw new NonexistentArtistError("name", artistName);
+    } 
+
+    return artist.albums.map(album => album.name);
+  }
+
+  populateAlbumsForArtist(artistName){
+    unqfyRequester.requestSpotify('https://api.spotify.com/v1/search',
+      {
+	q:artistName,
+	type: 'artist'
+      }
+    )
+    .then(message => {
+      const artists  = message.artists.items;
+      const artistId = artists[0].id;
+      return unqfyRequester.requestSpotify('https://api.spotify.com/v1/artists/'+ artistId +'/albums', {})
+    })
+    .then(message => {
+      const albums = message.items;
+      const albumsData = albums.map(album => {
+        return {
+	  name : album.name,
+	  year : album.release_date.substring(0, 4)
+	};
+      })
+      const artist = this._artistas.find(artista => artista.name == artistName);
+      albumsData.forEach(albumData => artist.addAlbum(albumData));
+      this.save("data.json");
+    })
+    .catch(error => console.log(error.message));
   }
 
   save(filename) {

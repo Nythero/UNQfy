@@ -26,6 +26,14 @@ let commandSelectorArtist = {
     const artistId = param[0];
     return unqfy.getThisIs(artistId);
   },
+  getAlbumsBy : (unqfy, param) => {
+    const artistName = param[0];
+    return unqfy.getAlbumsForArtist(artistName);
+  },
+  llenar : (unqfy, param) => {
+    const artistName = param[0];
+    return unqfy.populateAlbumsForArtist(artistName);
+  }
 }
 
 module.exports = commandSelectorArtist;

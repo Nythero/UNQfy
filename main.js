@@ -54,22 +54,15 @@ const dataFromArgs = args => args.slice(3, args.length);
 
 function main() {
   const command = process.argv[2];
-  try {
-    commandSelector.validarCommand(command);
-  }
-  catch (error){
-    if (error instanceof NonexistentCommandError){
-      console.debug(error.message);
-      return -1;
-    }
-    else {
-      throw error;
-    }
-  }
   const parameters = dataFromArgs(process.argv);
   const unqfy = getUNQfy();
-  console.debug(commandSelector.select(command)(unqfy, parameters));
-  saveUNQfy(unqfy);
+  try{
+    console.log(commandSelector.select(command)(unqfy, parameters));
+  }
+  catch(error){
+    console.log(error.message);
+  }
+  //saveUNQfy(unqfy);
 }
 
 main();
