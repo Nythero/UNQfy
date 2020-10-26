@@ -28,7 +28,7 @@ let commandSelectorArtist = {
   },
   getAlbumsBy : (unqfy, param) => {
     const artistName = param[0];
-    return unqfy.getAlbumsForArtist(artistName);
+    return unqfy.
   },
   llenar : (unqfy, param) => {
     const artistName = param[0];

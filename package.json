@@ -5,7 +5,9 @@
   "main": "main.js",
   "dependencies": {
     "chai": "^4.1.2",
-    "picklify": "github:lwoites/picklify"
+    "express": "^4.17.1",
+    "picklify": "github:lwoites/picklify",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -15,8 +17,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "eslint": "node_modules/.bin/eslint *.js",
-    "start":"node main.js addArtist Queen \"United Kingdom\" && node main.js addAlbum 2048 Innuendo 1991 && node main.js addTrack 2112 Innuendo 391 Rock && node main.js addTrack 2112 \"Im going Slightly Mad\" 262 Rock && node main.js addTrack 2112 Headlong 278 Rock && node main.js addArtist \"Lupe Fiasco\" USA && node main.js addAlbum 4096 \"Tetsuo & Youth\" 2015 && node main.js addTrack 4160 Summer 87 Rap Instrumental && node main.js addTrack 4160 Mural 529 Rap" 
+    "eslint": "node_modules/.bin/eslint *.js"
   },
   "author": "",
   "license": "ISC"
