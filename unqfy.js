@@ -8,6 +8,7 @@ const Playlist = require("./playlist");
 const Usuario = require("./usuario");
 const thisIsCreator = require("./thisIsCreator");
 const unqfyRequester = require("./unqfyRequester");
+const MusixMatchClient = require("./musixMatchClient");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
@@ -335,6 +336,19 @@ class UNQfy {
   save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
+  }
+
+  getLyrics(trackId) {
+    const track = this.getTrackById(trackId);
+    if (track.lyrics === null) {
+      console.log(track.name);
+      new MusixMatchClient().getTrackLyrics(track.name).then((lyrics) => {
+        track.lyrics = lyrics;
+        this.save("data.json");
+        return lyrics;
+      });
+    }
+    else return track.lyrics;
   }
 
   static load(filename) {

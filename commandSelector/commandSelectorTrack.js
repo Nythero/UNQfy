@@ -1,4 +1,6 @@
-let commandSelectorTrack = {
+const unqfy = require("../unqfy");
+
+const commandSelectorTrack = {
   addTrack : (unqfy, dataTrack) => {
     const id = parseInt(dataTrack[0]);
     const dur = parseInt(dataTrack[2]);
@@ -6,7 +8,7 @@ let commandSelectorTrack = {
     return unqfy.addTrack(id, { name: dataTrack[1], duration: dur, genres });
   },
   deleteTrack : (unqfy, idParam) => {
-    let id = parseInt(idParam[0]);
+    const id = parseInt(idParam[0]);
     return unqfy.deleteTrack(id);
   },
   getTrackById : (unqfy, idParam) => {
@@ -18,13 +20,17 @@ let commandSelectorTrack = {
     return unqfy.getTracksMatchingGenres(genres);
   },
   getTracksByAlbum : (unqfy, idParam) => {
-    let albumId = parseInt(idParam[0]);
+    const albumId = parseInt(idParam[0]);
     return unqfy.getTracksByAlbum(albumId);
   },
   trackTimesListened : (unqfy, idParam) => {
-    let trackId = parseInt(idParam[0]);
+    const trackId = parseInt(idParam[0]);
     return unqfy.trackTimesListened(trackId);
+  },
+  getLyrics : (unqfy, idParam) => {
+    const trackId = parseInt(idParam[0]);
+    return unqfy.getLyrics(trackId);
   }
-}
+};
 
 module.exports = commandSelectorTrack;

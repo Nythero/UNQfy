@@ -3,46 +3,31 @@ const rp = require("request-promise");
 const BASE_URL = "http://api.musixmatch.com/ws/1.1";
 const API_KEY = "fa29e650d5f2618d4f314780014d54b0";
 
-const musixMatchClient = {
-  searchArtistByName: (artistName) => {
-    const options = {
-      uri: BASE_URL + "/artist.search",
-      qs: {
-        apikey: API_KEY,
-        q_artist: artistName,
-      },
-      json: true
-    };
-
-    rp.get(options)
-      .then((response) => {
-        const header = response.message.header;
-        const body = response.message.body;
-        if (header.status_code !== 200) {
-          throw new Error("error while searching an artist.");
-        }
-
-        const artistFound = body.artist_list[0];
-        console.debug(`Artist found: ${JSON.stringify(artistFound)}`);
-        return artistFound;
+class MusixMatchClient {
+  getTrackLyrics(trackName) {
+    return this._searchTrack(trackName)
+      .then((track) => {
+        console.log(track.track_id);
+        return this._getTrackLyrics(track.track_id);
       })
-      .catch((error) => {
-        console.log("something went bad.", error);
+      .then((lyrics) => { 
+        console.log(lyrics);
+        return lyrics;
       });
-  },
-
-  searchTrack: (trackName, artistId) => {
+  }
+  
+  _searchTrack(trackName) {
     const options = {
       uri: BASE_URL + "/track.search",
       qs: {
         apikey: API_KEY,
         q_track: trackName,
-        f_artist_id: artistId
       },
-      json: true
+      json: true,
     };
 
-    rp.get(options)
+    return rp
+      .get(options)
       .then((response) => {
         const header = response.message.header;
         const body = response.message.body;
@@ -50,26 +35,26 @@ const musixMatchClient = {
           throw new Error("error while searching a track.");
         }
 
-        const trackFound = body.track_list[0];
-        console.debug(`Track found: ${JSON.stringify(trackFound)}`);
+        const trackFound = body.track_list[0].track;
         return trackFound;
       })
       .catch((error) => {
         console.log("something went bad.", error);
       });
-  },
+  }
 
-  getTrackLyrics: (trackId) => {
+  _getTrackLyrics(musixTrackId) {
     const options = {
       uri: BASE_URL + "/track.lyrics.get",
       qs: {
         apikey: API_KEY,
-        track_id: trackId
+        track_id: musixTrackId,
       },
-      json: true
+      json: true,
     };
 
-    rp.get(options)
+    return rp
+      .get(options)
       .then((response) => {
         const header = response.message.header;
         const body = response.message.body;
@@ -77,18 +62,19 @@ const musixMatchClient = {
           throw new Error("error while searching track lyrics.");
         }
 
-        const lyricsFound = body.lyrics;
-        console.debug(`Lyrics found: ${lyricsFound.lyrics_body}`);
+        const lyricsFound = body.lyrics.lyrics_body;
         return lyricsFound;
       })
       .catch((error) => {
         console.log("something went bad.", error);
       });
-  },
-};
+  }
+}
 
-module.exports = musixMatchClient;
+module.exports = MusixMatchClient;
 
-// musixMatchClient.searchArtistByName("Green Day");
-// musixMatchClient.searchTrack("Basket case", 290);
-musixMatchClient.getTrackLyrics(84590104);
+// const musix = new MusixMatchClient();
+// musix
+//   .searchTrack("Basket case")
+//   .then((track) => musix.getTrackLyrics(track.track_id))
+//   .then((lyrics) => console.log(lyrics));
