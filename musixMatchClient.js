@@ -6,16 +6,10 @@ const API_KEY = "fa29e650d5f2618d4f314780014d54b0";
 class MusixMatchClient {
   getTrackLyrics(trackName) {
     return this._searchTrack(trackName)
-      .then((track) => {
-        console.log(track.track_id);
-        return this._getTrackLyrics(track.track_id);
-      })
-      .then((lyrics) => { 
-        console.log(lyrics);
-        return lyrics;
-      });
+      .then((track) => this._getTrackLyrics(track.track_id))
+      .then((lyrics) => lyrics);
   }
-  
+
   _searchTrack(trackName) {
     const options = {
       uri: BASE_URL + "/track.search",
@@ -72,9 +66,3 @@ class MusixMatchClient {
 }
 
 module.exports = MusixMatchClient;
-
-// const musix = new MusixMatchClient();
-// musix
-//   .searchTrack("Basket case")
-//   .then((track) => musix.getTrackLyrics(track.track_id))
-//   .then((lyrics) => console.log(lyrics));
