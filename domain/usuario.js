@@ -1,4 +1,3 @@
-const idManager = require("./idManager");
 class Usuario {
   constructor(username){
     this._username = username;
