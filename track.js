@@ -8,6 +8,7 @@ class Track extends MatchingObject{
     this._duration = duration;
     this._genres = [].concat(genres);
     this._timesListened = 0;
+    this._lyrics = null;
   }
   get id(){
     return this._id;
@@ -23,6 +24,12 @@ class Track extends MatchingObject{
   }
   get timesListened() {
     return this._timesListened;
+  }
+  get lyrics(){
+    return this._lyrics;
+  }
+  set lyrics(value) {
+    this._lyrics = value;
   }
   addIfMatchName(dictionary, name){
     super.addIfMatch(dictionary.tracks, 'name', name);
