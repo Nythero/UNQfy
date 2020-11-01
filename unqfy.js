@@ -27,11 +27,6 @@ class UNQfy {
     this._newArtistId = 1;
   }
 
-  // express testing. TODO: delete.
-  hello() {
-    return "Hello from unqfy.";
-  }
-
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
@@ -341,6 +336,11 @@ class UNQfy {
   save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
+  }
+
+  saveDefault() {
+    const serializedData = picklify.picklify(this);
+    fs.writeFileSync("data.json", JSON.stringify(serializedData, null, 2));
   }
 
   getLyrics(trackId) {
