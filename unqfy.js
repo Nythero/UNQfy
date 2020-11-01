@@ -1,14 +1,14 @@
 const picklify = require("picklify"); // para cargar/guarfar unqfy
 const fs = require("fs"); // para cargar/guarfar unqfy
-const Artist = require("./artist");
-const idManager = require("./idManager");
-const Album = require("./album");
-const Track = require("./track");
-const Playlist = require("./playlist");
-const Usuario = require("./usuario");
+const Artist = require("./domain/artist");
+const idManager = require("./utils/idManager");
+const Album = require("./domain/album");
+const Track = require("./domain/track");
+const Playlist = require("./domain/playlist");
+const Usuario = require("./domain/usuario");
 const thisIsCreator = require("./thisIsCreator");
 const unqfyRequester = require("./unqfyRequester");
-const MusixMatchClient = require("./musixMatchClient");
+const MusixMatchClient = require("./externalClients/musixMatchClient");
 
 //Errores
 const NonexistentArtistError = require("./error/nonexistentArtistError");
@@ -336,6 +336,11 @@ class UNQfy {
   save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
+  }
+
+  saveDefault() {
+    const serializedData = picklify.picklify(this);
+    fs.writeFileSync("data.json", JSON.stringify(serializedData, null, 2));
   }
 
   getLyrics(trackId) {

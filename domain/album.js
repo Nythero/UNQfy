@@ -1,10 +1,10 @@
 const Track = require("./track");
-const idManager = require("./idManager");
-const MatchingObject = require("./matchingObject");
+const idManager = require("../utils/idManager");
+const MatchingObject = require("../utils/matchingObject");
 
 //Errores
-const NonexistentTrackError = require("./error/nonexistentTrackError");
-const TrackAlreadyOnAlbumError = require("./error/trackAlreadyOnAlbumError");
+const NonexistentTrackError = require("../error/nonexistentTrackError");
+const TrackAlreadyOnAlbumError = require("../error/trackAlreadyOnAlbumError");
 
 class Album extends MatchingObject {
   constructor(id, name, year) {

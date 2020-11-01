@@ -1,4 +1,4 @@
-const MatchingObject = require('./matchingObject');
+const MatchingObject = require('../utils/matchingObject');
 
 class Track extends MatchingObject{
   constructor(id, name, duration, genres){

@@ -1,5 +1,5 @@
-const MatchingObject = require("./matchingObject");
-const idManager = require("./idManager");
+const MatchingObject = require("../utils/matchingObject");
+const idManager = require("../utils/idManager");
 
 class Playlist extends MatchingObject {
   constructor(name) {

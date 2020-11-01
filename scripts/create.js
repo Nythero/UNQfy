@@ -87,6 +87,6 @@ const run = (cmd) => {
 };
 
 createArtists();
-createAlbums();
-createTracks();
-createUsuarios();
+// createAlbums();
+// createTracks();
+// createUsuarios();
