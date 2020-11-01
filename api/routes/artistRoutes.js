@@ -15,20 +15,21 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
   const body = req.body;
-  const artistCreated = req.body.unqfy.addArtist({
+  const artistCreated = body.unqfy.addArtist({
     name: body.name,
     country: body.countr,
   });
-  req.body.unqfy.save(req.body.dataPath);
+  body.unqfy.save(body.dataPath);
 
   res.status(201);
   res.send(ArtistDto.map(artistCreated));
 });
 
 router.delete("/:id", (req, res) => {
+  const body = req.body;
   const id = parseInt(req.params.id);
-  req.body.unqfy.deleteArtist(id);
-  req.body.unqfy.save(req.body.dataPath);
+  body.unqfy.deleteArtist(id);
+  body.unqfy.save(body.dataPath);
 
   res.status(204).send();
 });
