@@ -370,7 +370,7 @@ class UNQfy {
     const track = this.getTrackById(trackId);
     if (track.lyrics === null) {
       console.log(track.name);
-      new MusixMatchClient().getTrackLyrics(track.name).then((lyrics) => {
+      return new MusixMatchClient().getTrackLyrics(track.name).then((lyrics) => {
         track.lyrics = lyrics;
         this.save("data.json");
         return lyrics;
