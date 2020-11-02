@@ -7,6 +7,12 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Run server.js",
+            "program": "${workspaceFolder}/api/server.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Run main.js",
             "program": "${workspaceFolder}/main.js"
         },

@@ -4,7 +4,8 @@ const port = 3000;
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const unqmod = require("../unqfy");
-const dataPath = "../data.json";
+const path = require("path");
+const dataPath = path.join(__dirname, "../data.json");
 
 const artistRoutes = require('./routes/artistRoutes');
 
