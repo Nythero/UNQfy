@@ -379,6 +379,16 @@ class UNQfy {
     else return track.lyrics;
   }
 
+  searchArtists(artistName) {
+    return this._artistas.filter((a) => a.name.toLowerCase().includes(artistName));
+  }
+
+  searchAlbums(albumName) {
+    return this._artistas
+        .reduce((acc, a) => acc.concat(a.albums), [])
+        .filter((alb) => alb.name.toLowerCase().includes(albumName));
+  }
+
   static load(filename) {
     const serializedData = fs.readFileSync(filename, { encoding: "utf-8" });
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
