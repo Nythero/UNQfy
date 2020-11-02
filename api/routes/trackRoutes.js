@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const NonexistentTrackError = require("../../error/nonexistentTrackError");
-
-
 router.get('/:trackId/lyrics', (req, res) => {
   const id = req.params.trackId;
   
