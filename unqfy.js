@@ -52,11 +52,34 @@ class UNQfy {
     }
   }
 
+  _validarIdArtista(id) {
+    if (!this._artistas.some((artist) => artist.id === id)) {
+      throw new NonexistentArtistError("id", id);
+    }
+  }
+
   // id: id del artista a eliminar
   deleteArtist(id) {
+    this._validarIdArtista(id);
     /* Elimina de unqfy el artista con el id indicado */
     this._artistas = this._artistas.filter((a) => a.id !== id);
     return this._artistas;
+  }
+
+  // artistData: objeto JS con los datos necesarios para actualizar un artista
+  //   artistData.id (int)
+  //   artistData.name (string)
+  //   artistData.country (string)
+  // retorna: el artista actualizado
+  updateArtist(artistData) {
+    this._validarIdArtista(artistData.id);
+    const artistIndex = this._artistas.findIndex(a => a.id === artistData.id);
+    const artistToUpdate = this._artistas[artistIndex];
+    artistToUpdate._name = artistData.name;
+    artistToUpdate._country = artistData.country;
+    this._artistas[artistIndex] = artistToUpdate;
+    
+    return artistToUpdate;
   }
 
   // albumData: objeto JS con los datos necesarios para crear un album

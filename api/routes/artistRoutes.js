@@ -3,7 +3,10 @@ const router = express.Router();
 const ArtistDto = require("../dtos/artistDto");
 
 router.get("/", (req, res) => {
-  const artists = req.body.unqfy.getArtists();
+  const artistName = req.query.name.toLowerCase();
+  const artists = req.body.unqfy
+    .getArtists()
+    .filter((a) => a.name.toLowerCase().includes(artistName));
   res.send(artists.map((a) => ArtistDto.map(a)));
 });
 
@@ -34,16 +37,18 @@ router.delete("/:id", (req, res) => {
   res.status(204).send();
 });
 
-// router.patch("/", (req, res) => {
-//   const body = req.body;
-//   const artistCreated = req.body.unqfy.addArtist({
-//     name: body.name,
-//     country: body.countr,
-//   });
-//   req.body.unqfy.save(req.body.dataPath);
+router.patch("/:id", (req, res) => {
+  const body = req.body;
+  const id = parseInt(req.params.id);
+  const artistUpdated = body.unqfy.updateArtist({
+    id: id,
+    name: body.name,
+    country: body.country,
+  });
+  body.unqfy.save(body.dataPath);
 
-//   res.status(201);
-//   res.send(artistCreated);
-// });
+  res.status(200);
+  res.send(ArtistDto.map(artistUpdated));
+});
 
 module.exports = router;
