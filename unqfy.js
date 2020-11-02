@@ -256,6 +256,16 @@ class UNQfy {
     return this._playlists;
   }
 
+  createPlaylistWithTracks(name, tracks){
+    const playlist = new Playlist(name);
+    tracks.forEach(trackId => {
+      const track = this.getTrackById(trackId);
+      playlist.addTrack(track);
+    });
+    this._playlists.push(playlist);
+    return playlist;
+  }
+
   // username: nombre del usuario (string)
   // retorna: el nuevo usuario creado
   createUsuario(username) {
