@@ -54,24 +54,21 @@ class UNQfy {
   _validarData(data, fields){
     const invalidFields = fields.filter(field => data[field] === undefined);
     if(invalidFields.length !== 0){
-      throw new invalidDataError(invalidFields);
+      throw new InvalidDataError(invalidFields);
     }
   }
   _validarIdArtista(id) {
-    if (!this._artistas.some((artist) => artist.id === id)) {
-      throw new NonexistentArtistError("id", id);
+    if (id === undefined){
+      throw new InvalidDataError(["artistId"]);      
     }
+    else if (this._artistas.every((artist) => artist.id !== id)) {
+      throw new NonexistentArtistError("id", id);
+    } 
+    
   }
 
   _validarNombreArtista(name) {
     if (this._artistas.some((artist) => artist.name.toLowerCase() === name.toLowerCase())) {
-      throw new ArtistNameTakenError(name);
-    }
-  }
-
-  _validarNombreAlbum(artistId, name) {
-    const albums = this.getArtistById(artistId).albums;
-    if (albums.some((artist) => artist.name.toLowerCase() === name.toLowerCase())) {
       throw new ArtistNameTakenError(name);
     }
   }
@@ -119,7 +116,6 @@ class UNQfy {
   */
     this._validarData(albumData, ["name", "year"]);
     this._validarIdArtista(artistId);
-    this._validarNombreAlbum(albumData.name);
     const artist = this.getArtistById(artistId);
     return artist.addAlbum(albumData);
   }
