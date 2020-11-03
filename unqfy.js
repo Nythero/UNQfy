@@ -18,6 +18,7 @@ const ArtistNameTakenError = require("./error/artistNameTakenError");
 const NonexistentPlaylistError = require("./error/nonexistentPlaylistError");
 const UserNameTakenError = require("./error/userNameTakenError");
 const NonexistentUserError = require("./error/nonexistentUserError");
+const InvalidDataError = require("./error/invalidDataError");
 
 class UNQfy {
   constructor() {
@@ -37,6 +38,11 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
+
+    this._validarData(artistData, ["name", "country"]);
+
+    this._validarNombreArtista(artistData.name);
+
     const artistaNuevo = new Artist(
       idManager.idNewArtist(this),
       artistData.name,
@@ -44,6 +50,13 @@ class UNQfy {
     );
     this._artistas.push(artistaNuevo);
     return artistaNuevo;
+  }
+
+  _validarData(data, fields){
+    const invalidFields = fields.filter(field => data[field] === undefined);
+    if(invalidFields.length !== 0){
+      throw new invalidDataError(invalidFields);
+    }
   }
 
   _validarNombreArtista(name) {
@@ -72,6 +85,7 @@ class UNQfy {
   //   artistData.country (string)
   // retorna: el artista actualizado
   updateArtist(artistData) {
+    this._validarData(artistData, ["id", "name", "country"]);
     this._validarIdArtista(artistData.id);
     const artistIndex = this._artistas.findIndex(a => a.id === artistData.id);
     const artistToUpdate = this._artistas[artistIndex];
@@ -92,6 +106,7 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
+    this._validarData(albumData, ["name", "year"]);
     const artist = this.getArtistById(artistId);
     return artist.addAlbum(albumData);
   }
@@ -101,6 +116,29 @@ class UNQfy {
     /* Elimina de unqfy el album con el id indicado */
     const albums = this.getArtistById(id).deleteAlbum(id);
     return albums;
+  }
+
+  // albumData: objeto JS con los datos necesarios para actualizar un album
+  //   albumData.id (int)
+  //   albumData.year (int)
+  // retorna: el artista actualizado
+  updateAlbum(albumData) {
+    // this._validarIdAlbum(albumData.id);
+    try {
+      const artist = this.getArtistById(albumData.id);
+      const albumIndex = artist.albums.findIndex(a => a.id === albumData.id);
+      if(albumIndex === -1) throw new NonexistentAlbumError("id", albumData.id);
+      const albumToUpdate = artist.albums[albumIndex];
+      albumToUpdate._year = albumData.year;
+      artist.albums[albumIndex] = albumToUpdate;
+
+      return albumToUpdate;
+    }
+    catch(e) {
+      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
+        throw new NonexistentAlbumError(albumData.id);
+      }
+    }
   }
 
   // trackData: objeto JS con los datos necesarios para crear un track
@@ -387,6 +425,16 @@ class UNQfy {
       });
     }
     else return track.lyrics;
+  }
+
+  searchArtists(artistName) {
+    return this._artistas.filter((a) => a.name.toLowerCase().includes(artistName));
+  }
+
+  searchAlbums(albumName) {
+    return this._artistas
+        .reduce((acc, a) => acc.concat(a.albums), [])
+        .filter((alb) => alb.name.toLowerCase().includes(albumName));
   }
 
   static load(filename) {

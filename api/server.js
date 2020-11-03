@@ -11,6 +11,7 @@ const dataPath = path.join(__dirname, "../data.json");
 const artistRoutes = require('./routes/artistRoutes');
 const trackRoutes  = require('./routes/trackRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
+const albumRoutes = require('./routes/albumRoutes');
 
 const unqfyMiddleware = (req, res, next) => {
   req.body.dataPath = dataPath;
@@ -28,6 +29,7 @@ const api = '/api';
 app.use(api + '/artists', artistRoutes);
 app.use(api + '/tracks', trackRoutes);
 app.use(api + '/playlists', playlistRoutes);
+app.use(api + '/albums', albumRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

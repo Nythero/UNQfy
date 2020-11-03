@@ -9,7 +9,9 @@ router.get("/", (req, res) => {
   
   const artists = req.body.unqfy
     .getArtists()
-    .filter((a) => contains(a));
+    .filter((a) => contains(a));/*
+  const artistName = req.query.name.toLowerCase();
+  const artists = req.body.unqfy.searchArtists(artistName);*/
   res.send(artists.map((a) => ArtistDto.map(a)));
 });
 
