@@ -38,7 +38,6 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
-
     this._validarData(artistData, ["name", "country"]);
 
     this._validarNombreArtista(artistData.name);
@@ -58,16 +57,28 @@ class UNQfy {
       throw new invalidDataError(invalidFields);
     }
   }
+  _validarIdArtista(id) {
+    if (!this._artistas.some((artist) => artist.id === id)) {
+      throw new NonexistentArtistError("id", id);
+    }
+  }
 
   _validarNombreArtista(name) {
-    if (this._artistas.some((artist) => artist.name == name)) {
+    if (this._artistas.some((artist) => artist.name.toLowerCase() === name.toLowerCase())) {
       throw new ArtistNameTakenError(name);
     }
   }
 
-  _validarIdArtista(id) {
-    if (!this._artistas.some((artist) => artist.id === id)) {
-      throw new NonexistentArtistError("id", id);
+  _validarNombreAlbum(artistId, name) {
+    const albums = this.getArtistById(artistId).albums;
+    if (albums.some((artist) => artist.name.toLowerCase() === name.toLowerCase())) {
+      throw new ArtistNameTakenError(name);
+    }
+  }
+
+  _validarUsername(username) {
+    if (this._usuarios.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
+      throw new UserNameTakenError(username);
     }
   }
 
@@ -107,6 +118,8 @@ class UNQfy {
      - una propiedad year (number)
   */
     this._validarData(albumData, ["name", "year"]);
+    this._validarIdArtista(artistId);
+    this._validarNombreAlbum(albumData.name);
     const artist = this.getArtistById(artistId);
     return artist.addAlbum(albumData);
   }
@@ -114,8 +127,15 @@ class UNQfy {
   // id: id del album a eliminar
   deleteAlbum(id) {
     /* Elimina de unqfy el album con el id indicado */
-    const albums = this.getArtistById(id).deleteAlbum(id);
-    return albums;
+    try {
+      const albums = this.getArtistById(id).deleteAlbum(id);
+      return albums;
+    }
+    catch(e) {
+      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
+        throw new NonexistentAlbumError(id);
+      }
+    }
   }
 
   // albumData: objeto JS con los datos necesarios para actualizar un album
@@ -313,12 +333,6 @@ class UNQfy {
     const usuarioNuevo = new Usuario(username);
     this._usuarios.push(usuarioNuevo);
     return usuarioNuevo;
-  }
-
-  _validarUsername(username) {
-    if (this._usuarios.some((u) => u.username === username)) {
-      throw new UserNameTakenError(username);
-    }
   }
 
   getUsuario(username) {
