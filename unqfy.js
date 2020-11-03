@@ -103,6 +103,29 @@ class UNQfy {
     return albums;
   }
 
+  // albumData: objeto JS con los datos necesarios para actualizar un album
+  //   albumData.id (int)
+  //   albumData.year (int)
+  // retorna: el artista actualizado
+  updateAlbum(albumData) {
+    // this._validarIdAlbum(albumData.id);
+    try {
+      const artist = this.getArtistById(albumData.id);
+      const albumIndex = artist.albums.findIndex(a => a.id === albumData.id);
+      if(albumIndex === -1) throw new NonexistentAlbumError("id", albumData.id);
+      const albumToUpdate = artist.albums[albumIndex];
+      albumToUpdate._year = albumData.year;
+      artist.albums[albumIndex] = albumToUpdate;
+
+      return albumToUpdate;
+    }
+    catch(e) {
+      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
+        throw new NonexistentAlbumError(albumData.id);
+      }
+    }
+  }
+
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
   //   trackData.duration (number)
@@ -377,6 +400,16 @@ class UNQfy {
       });
     }
     else return track.lyrics;
+  }
+
+  searchArtists(artistName) {
+    return this._artistas.filter((a) => a.name.toLowerCase().includes(artistName));
+  }
+
+  searchAlbums(albumName) {
+    return this._artistas
+        .reduce((acc, a) => acc.concat(a.albums), [])
+        .filter((alb) => alb.name.toLowerCase().includes(albumName));
   }
 
   static load(filename) {
