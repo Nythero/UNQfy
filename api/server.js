@@ -12,7 +12,9 @@ const albumRoutes = require('./routes/albumRoutes');
 const handleErrors = require("../api/middlewares/handleErrors");
 const unqfy = require("../api/middlewares/unqfy");
 
-app.use(bodyParser.json());
+app.use([bodyParser.json(), function (err,req, res, next) {
+  res.status(400).send({status:400, errorCode:"BAD_REQUEST"});
+}]);
 app.use(unqfy);
 
 const api = '/api';
