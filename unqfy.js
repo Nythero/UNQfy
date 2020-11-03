@@ -103,6 +103,21 @@ class UNQfy {
     return albums;
   }
 
+  // albumData: objeto JS con los datos necesarios para actualizar un album
+  //   albumData.id (int)
+  //   albumData.year (int)
+  // retorna: el artista actualizado
+  updateAlbum(albumData) {
+    // this._validarIdAlbum(albumData.id);
+    const artist = this.getArtistById(albumData.id);
+    const albumIndex = artist.albums.findIndex(a => a.id === albumData.id);
+    const albumToUpdate = artist.albums[albumIndex];
+    albumToUpdate._year = albumData.year;
+    artist.albums[albumIndex] = albumToUpdate;
+    
+    return albumToUpdate;
+  }
+
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
   //   trackData.duration (number)
