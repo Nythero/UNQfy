@@ -18,6 +18,7 @@ const ArtistNameTakenError = require("./error/artistNameTakenError");
 const NonexistentPlaylistError = require("./error/nonexistentPlaylistError");
 const UserNameTakenError = require("./error/userNameTakenError");
 const NonexistentUserError = require("./error/nonexistentUserError");
+const InvalidDataError = require("./error/invalidDataError");
 
 class UNQfy {
   constructor() {
@@ -37,6 +38,10 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
+    this._validarData(artistData, ["name", "country"]);
+
+    this._validarNombreArtista(artistData.name);
+
     const artistaNuevo = new Artist(
       idManager.idNewArtist(this),
       artistData.name,
@@ -46,15 +51,31 @@ class UNQfy {
     return artistaNuevo;
   }
 
+  _validarData(data, fields){
+    const invalidFields = fields.filter(field => data[field] === undefined);
+    if(invalidFields.length !== 0){
+      throw new InvalidDataError(invalidFields);
+    }
+  }
+  _validarIdArtista(id) {
+    if (id === undefined){
+      throw new InvalidDataError(["artistId"]);      
+    }
+    else if (this._artistas.every((artist) => artist.id !== id)) {
+      throw new NonexistentArtistError("id", id);
+    } 
+    
+  }
+
   _validarNombreArtista(name) {
-    if (this._artistas.some((artist) => artist.name == name)) {
+    if (this._artistas.some((artist) => artist.name.toLowerCase() === name.toLowerCase())) {
       throw new ArtistNameTakenError(name);
     }
   }
 
-  _validarIdArtista(id) {
-    if (!this._artistas.some((artist) => artist.id === id)) {
-      throw new NonexistentArtistError("id", id);
+  _validarUsername(username) {
+    if (this._usuarios.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
+      throw new UserNameTakenError(username);
     }
   }
 
@@ -72,6 +93,7 @@ class UNQfy {
   //   artistData.country (string)
   // retorna: el artista actualizado
   updateArtist(artistData) {
+    this._validarData(artistData, ["id", "name", "country"]);
     this._validarIdArtista(artistData.id);
     const artistIndex = this._artistas.findIndex(a => a.id === artistData.id);
     const artistToUpdate = this._artistas[artistIndex];
@@ -92,6 +114,8 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
+    this._validarData(albumData, ["name", "year"]);
+    this._validarIdArtista(artistId);
     const artist = this.getArtistById(artistId);
     return artist.addAlbum(albumData);
   }
@@ -99,8 +123,15 @@ class UNQfy {
   // id: id del album a eliminar
   deleteAlbum(id) {
     /* Elimina de unqfy el album con el id indicado */
-    const albums = this.getArtistById(id).deleteAlbum(id);
-    return albums;
+    try {
+      const albums = this.getArtistById(id).deleteAlbum(id);
+      return albums;
+    }
+    catch(e) {
+      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
+        throw new NonexistentAlbumError(id);
+      }
+    }
   }
 
   // albumData: objeto JS con los datos necesarios para actualizar un album
@@ -279,6 +310,16 @@ class UNQfy {
     return this._playlists;
   }
 
+  createPlaylistWithTracks(name, tracks){
+    const playlist = new Playlist(name);
+    tracks.forEach(trackId => {
+      const track = this.getTrackById(trackId);
+      playlist.addTrack(track);
+    });
+    this._playlists.push(playlist);
+    return playlist;
+  }
+
   // username: nombre del usuario (string)
   // retorna: el nuevo usuario creado
   createUsuario(username) {
@@ -288,12 +329,6 @@ class UNQfy {
     const usuarioNuevo = new Usuario(username);
     this._usuarios.push(usuarioNuevo);
     return usuarioNuevo;
-  }
-
-  _validarUsername(username) {
-    if (this._usuarios.some((u) => u.username === username)) {
-      throw new UserNameTakenError(username);
-    }
   }
 
   getUsuario(username) {
@@ -393,7 +428,7 @@ class UNQfy {
     const track = this.getTrackById(trackId);
     if (track.lyrics === null) {
       console.log(track.name);
-      new MusixMatchClient().getTrackLyrics(track.name).then((lyrics) => {
+      return new MusixMatchClient().getTrackLyrics(track.name).then((lyrics) => {
         track.lyrics = lyrics;
         this.save("data.json");
         return lyrics;

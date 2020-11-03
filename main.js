@@ -62,7 +62,7 @@ function main() {
   catch(error){
     console.log(error.message);
   }
-  //saveUNQfy(unqfy);
+  saveUNQfy(unqfy);
 }
 
 main();

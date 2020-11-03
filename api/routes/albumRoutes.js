@@ -3,7 +3,9 @@ const router = express.Router();
 const AlbumDto = require("../dtos/albumDto");
 
 router.get("/", (req, res) => {
-  const albumName = req.query.name.toLowerCase();
+  
+  let albumName = req.query.name;
+  albumName = (albumName === undefined)? "" : albumName;
   const albums = req.body.unqfy.searchAlbums(albumName);
   res.send(albums.map((a) => AlbumDto.map(a)));
 });

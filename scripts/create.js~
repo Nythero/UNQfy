@@ -50,7 +50,6 @@ const usuarios = [
 
 const createArtists = () => {
   artists.forEach((a) => {
-    console.log(a);
     run(`node main.js addArtist "${a.name}" "${a.country}"`);
   });
 };

@@ -3,8 +3,15 @@ const router = express.Router();
 const ArtistDto = require("../dtos/artistDto");
 
 router.get("/", (req, res) => {
+  const artistName = req.query.name;
+
+  const contains = (artist) => artistName === undefined || artist.name.toLowerCase().includes(artistName.toLowerCase());
+  
+  const artists = req.body.unqfy
+    .getArtists()
+    .filter((a) => contains(a));/*
   const artistName = req.query.name.toLowerCase();
-  const artists = req.body.unqfy.searchArtists(artistName);
+  const artists = req.body.unqfy.searchArtists(artistName);*/
   res.send(artists.map((a) => ArtistDto.map(a)));
 });
 
@@ -35,7 +42,7 @@ router.delete("/:id", (req, res) => {
   res.status(204).send();
 });
 
-router.patch("/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   const body = req.body;
   const id = parseInt(req.params.id);
   const artistUpdated = body.unqfy.updateArtist({

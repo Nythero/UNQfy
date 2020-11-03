@@ -4,6 +4,7 @@ const MatchingObject = require('../utils/matchingObject');
 
 //Errores
 const NonexistentAlbumError = require('../error/nonexistentAlbumError');
+const AlbumNameTakenError   = require('../error/AlbumNameTakenError');
 
 class Artist extends MatchingObject{
   constructor(id, name, country) {
@@ -27,9 +28,15 @@ class Artist extends MatchingObject{
     return this._country;
   }
   addAlbum(dataAlbum) {
+    this._validarNombreAlbum(dataAlbum.name);
     const album = new Album(idManager.idNewAlbum(this), dataAlbum.name, dataAlbum.year);
     this._albums.push(album);
     return album;
+  }
+  _validarNombreAlbum(name){
+    if (this._albums.some((album) => album.name == name)) {
+      throw new AlbumNameTakenError(name);
+    }
   }
   deleteAlbum(id) {
     this._albums = this._albums.filter(a => a.id !== id);
