@@ -109,13 +109,21 @@ class UNQfy {
   // retorna: el artista actualizado
   updateAlbum(albumData) {
     // this._validarIdAlbum(albumData.id);
-    const artist = this.getArtistById(albumData.id);
-    const albumIndex = artist.albums.findIndex(a => a.id === albumData.id);
-    const albumToUpdate = artist.albums[albumIndex];
-    albumToUpdate._year = albumData.year;
-    artist.albums[albumIndex] = albumToUpdate;
-    
-    return albumToUpdate;
+    try {
+      const artist = this.getArtistById(albumData.id);
+      const albumIndex = artist.albums.findIndex(a => a.id === albumData.id);
+      if(albumIndex === -1) throw new NonexistentAlbumError("id", albumData.id);
+      const albumToUpdate = artist.albums[albumIndex];
+      albumToUpdate._year = albumData.year;
+      artist.albums[albumIndex] = albumToUpdate;
+
+      return albumToUpdate;
+    }
+    catch(e) {
+      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
+        throw new NonexistentAlbumError(albumData.id);
+      }
+    }
   }
 
   // trackData: objeto JS con los datos necesarios para crear un track
