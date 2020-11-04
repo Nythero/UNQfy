@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
   if(req.body.tracks !== undefined){
     playlist = unqfy.createPlaylistWithTracks(req.body.name, req.body.tracks);
   }
-  else if(req.body.maxDuration !== undefined && req.body.genres !== undefined){
+  else{
     playlist = unqfy.createPlaylist(req.body.name, req.body.genres, req.body.maxDuration);
   }
   unqfy.save(req.body.dataPath);

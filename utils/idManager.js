@@ -19,11 +19,11 @@ const IdManager = {
     this._playlistId += 1;
     return playlistId;
   },
-  _getId(field,id){
+  getId(field,id){
     return id - (id % this._bytesIniciales[field]);
   },
   equalId(field, firstId, secondId){
-    return this._getId(field, firstId) ===  this._getId(field, secondId);
+    return this.getId(field, firstId) ===  this.getId(field, secondId);
   }
 };
 

@@ -7,7 +7,7 @@ const unqfyRequester = {
   requestSpotify(uri, qs){
     const readFile = util.promisify(fs.readFile);
 
-    return readFile('spotifyCreds.json')
+    return readFile('./utils/spotifyCreds.json')
     .then(credsJson => JSON.parse(credsJson))
     .then(creds => creds.access_token)
     .then(token => {
