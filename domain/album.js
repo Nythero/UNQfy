@@ -30,7 +30,7 @@ class Album extends MatchingObject {
   }
   //Validators
   _validarDisponibilidadNombreTrack(data, accion) {
-    if (this._tracks.some((track) => track.name == dataTrack.name)) {
+    if (this._tracks.some((track) => track.name == data.name)) {
       throw new ResourceNameTakenError("Track", name, accion);
     }
   }
