@@ -385,6 +385,7 @@ class UNQfy {
   }
 
   populateAlbumsForArtist(artistName) {
+    this._validarExistenciaArtista(artistName, "name", "populateAlbumsForArtist");
     return unqfyRequester
       .requestSpotify("https://api.spotify.com/v1/search", {
         q: artistName,
@@ -400,15 +401,14 @@ class UNQfy {
       })
       .then((message) => {
         const albums = message.items;
-        const albumsData = albums.map((album) => {
+        let albumsData = albums.map((album) => {
           return {
             name: album.name,
             year: album.release_date.substring(0, 4),
           };
         });
-        const artist = this._artistas.find(
-          (artista) => artista.name == artistName
-        );
+	albumsData = albumsData.filter(albumData => !albumData.name.includes("Deluxe Remastered Version"));
+        const artist = this._artistas.find((artista) => artista.name == artistName);
         albumsData.forEach((albumData) => {
 	  try{
 	    artist.addAlbum(albumData)
