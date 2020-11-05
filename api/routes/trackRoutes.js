@@ -1,17 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-router.get('/:trackId/lyrics', (req, res) => {
+router.get("/:trackId/lyrics", (req, res, next) => {
   const id = req.params.trackId;
-  
-  const lyrics = req.body.unqfy.getLyrics(id);
+  const trackName = req.body.unqfy.getTrackById(id).name;
 
-  const trackName = req.body.unqfy
-    .getTrackById(id)
-    .name;  
-
-  Promise.resolve(lyrics)
-    .then(l => res.send({ Name: trackName, lyrics: l }));
+  req.body.unqfy
+    .getLyrics(id)
+    .then((lyrics) => res.send({ Name: trackName, lyrics: lyrics }))
+    .catch((err) => next(err));
 });
 
 module.exports = router;

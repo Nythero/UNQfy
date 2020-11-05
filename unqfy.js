@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const picklify = require("picklify"); // para cargar/guarfar unqfy
 const fs = require("fs"); // para cargar/guarfar unqfy
 const Artist = require("./domain/artist");
@@ -427,14 +428,13 @@ class UNQfy {
   getLyrics(trackId) {
     const track = this.getTrackById(trackId);
     if (track.lyrics === null) {
-      console.log(track.name);
       return new MusixMatchClient().getTrackLyrics(track.name).then((lyrics) => {
         track.lyrics = lyrics;
         this.save("data.json");
         return lyrics;
       });
     }
-    else return track.lyrics;
+    else return Promise.resolve(track.lyrics);
   }
 
   searchArtists(artistName) {

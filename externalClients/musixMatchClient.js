@@ -6,8 +6,8 @@ const API_KEY = "fa29e650d5f2618d4f314780014d54b0";
 class MusixMatchClient {
   getTrackLyrics(trackName) {
     return this._searchTrack(trackName)
-      .then((track) => this._getTrackLyrics(track.track_id))
-      .then((lyrics) => lyrics);
+    .then((track) => this._getTrackLyrics(track.track_id))
+    .then((lyrics) => lyrics);
   }
 
   _searchTrack(trackName) {
@@ -31,9 +31,6 @@ class MusixMatchClient {
 
         const trackFound = body.track_list[0].track;
         return trackFound;
-      })
-      .catch((error) => {
-        console.log("something went bad.", error);
       });
   }
 
@@ -58,9 +55,6 @@ class MusixMatchClient {
 
         const lyricsFound = body.lyrics.lyrics_body;
         return lyricsFound;
-      })
-      .catch((error) => {
-        console.log("something went bad.", error);
       });
   }
 }
