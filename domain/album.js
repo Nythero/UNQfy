@@ -35,6 +35,8 @@ class Album extends MatchingObject {
     }
   }
   _validarExistenciaTrack(data, accion){
+//    console.log(typeof this._tracks[0].id);
+//	  console.log(typeof data);
     if(this._tracks.every(track => track.id !== data)){
       throw new NonexistentResourceError("Track", data, accion);
     }

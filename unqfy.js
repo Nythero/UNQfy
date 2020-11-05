@@ -133,11 +133,8 @@ class UNQfy {
     catch(error){
       if(error instanceof NonexistentResourceError){
         error.operation = "addAlbum";
-        throw error;
       }
-      else{
-        throw error;
-      }
+      throw error;
     }
     return artist.addAlbum(albumData);
   }
@@ -193,7 +190,7 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-    const artist = this.getArtistById(id);
+    const artist = this.getArtistById(idManager.getId("artist", id));
     return artist.getAlbumById(id);
   }
 
@@ -216,7 +213,7 @@ class UNQfy {
   }
 
   getTrackById(id) {
-    const album = this.getAlbumById(idManager.getId(id, "album"));
+    const album = this.getAlbumById(idManager.getId("album", id));
     return album.getTrackById(id);
   }
 
@@ -298,7 +295,6 @@ class UNQfy {
   deletePlaylist(id) {
     /* Elimina de unqfy la playlist con el id indicado */
     this._validarExistenciaPlaylist(id, "deletePlaylist");
-
     this._playlists = this._playlists.filter((p) => p.id !== id);
     return this._playlists;
   }
@@ -322,6 +318,7 @@ class UNQfy {
   // retorna: el nuevo usuario creado
   createUsuario(username) {
     /* Crea un artista y lo agrega a unqfy. */
+    this._validarParametros({username:username}, ["username"]);
     this._validarDisponibilidadNombreUsuario(username, "createUsuario");
 
     const usuarioNuevo = new Usuario(username);
@@ -345,7 +342,7 @@ class UNQfy {
   tracksListened(username) {
     const user = this.getUsuario(username);
     const listenedTrackIds = user.tracksListened();
-    return listenedTrackIds.map((trackId) => this.getTrackById(trackId).name);
+    return listenedTrackIds.map((trackId) => this.getTrackById(trackId));
   }
 
   trackTimesListenedByUser(trackId, username) {
@@ -355,7 +352,14 @@ class UNQfy {
 
   listenTrack(trackId, username) {
     const user = this.getUsuario(username);
-    const track = this.getTrackById(trackId);
+    let track;
+    try {
+      track = this.getTrackById(trackId);
+    }
+    catch(err) {
+      if (err instanceof NonexistentResourceError) err.operation = "listenTrack";
+      throw err;
+    }
     user.listenTrack(track);
     return track;
   }

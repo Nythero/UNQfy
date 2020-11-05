@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UserDto = require("../dtos/userDto");
+const TrackDto = require("../dtos/trackDto");
 
 router.get("/", (req, res) => {
   const username = req.query.name;
@@ -50,5 +51,21 @@ router.post("/", (req, res) => {
 //   res.status(200);
 //   res.send(UserDto.map(albumUpdated));
 // });
+
+router.get("/:username/tracks", (req, res) => {
+  const username = req.params.username;
+  const unqfy = req.body.unqfy;
+  const tracksListened = unqfy.tracksListened(username);
+  res.status(200).send(tracksListened.map(track => TrackDto.map(track)));
+});
+
+router.post("/:username/tracks", (req, res) => {
+  const username = req.params.username;
+  const trackId  = parseInt(req.body.trackId);
+  const unqfy = req.body.unqfy;
+  const track = unqfy.listenTrack(trackId, username);
+  unqfy.save(req.body.dataPath);
+  res.status(201).send(TrackDto.map(track));
+});
 
 module.exports = router;
