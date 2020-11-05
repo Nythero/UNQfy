@@ -8,6 +8,7 @@ const artistRoutes = require('./routes/artistRoutes');
 const trackRoutes  = require('./routes/trackRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 const albumRoutes = require('./routes/albumRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const handleErrors = require("../api/middlewares/handleErrors");
 const unqfy = require("../api/middlewares/unqfy");
@@ -33,6 +34,7 @@ app.use(api + '/artists', artistRoutes);
 app.use(api + '/tracks', trackRoutes);
 app.use(api + '/playlists', playlistRoutes);
 app.use(api + '/albums', albumRoutes);
+app.use(api + '/users', userRoutes);
 app.all('*', (req, res) => {
   res.status(404).send({
     status: 404,
