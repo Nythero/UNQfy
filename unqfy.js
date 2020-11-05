@@ -344,6 +344,10 @@ class UNQfy {
     return user;
   }
 
+  getUsuarios() {
+    return this._usuarios;
+  }
+
   tracksListened(username) {
     const user = this.getUsuario(username);
     const listenedTrackIds = user.tracksListened();
