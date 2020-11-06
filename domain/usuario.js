@@ -7,7 +7,7 @@ class Usuario {
     return this._username;
   }
   tracksListened(){
-    return Object.keys(this._tracksListened);
+    return Object.keys(this._tracksListened).map(id => parseInt(id));
   }
   timesListened(trackId){
     const times = this._tracksListened[trackId];

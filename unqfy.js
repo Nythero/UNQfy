@@ -12,14 +12,9 @@ const unqfyRequester = require("./unqfyRequester");
 const MusixMatchClient = require("./externalClients/musixMatchClient");
 
 //Errores
-const NonexistentArtistError = require("./error/nonexistentArtistError");
-const NonexistentAlbumError = require("./error/nonexistentAlbumError");
-const NonexistentTrackError = require("./error/nonexistentTrackError");
-const ArtistNameTakenError = require("./error/artistNameTakenError");
-const NonexistentPlaylistError = require("./error/nonexistentPlaylistError");
-const UserNameTakenError = require("./error/userNameTakenError");
-const NonexistentUserError = require("./error/nonexistentUserError");
-const InvalidDataError = require("./error/invalidDataError");
+const InvalidDataError         = require("./error/invalidDataError");
+const ResourceNameTakenError   = require("./error/resourceNameTakenError");
+const NonexistentResourceError = require("./error/nonexistentResourceError");
 
 class UNQfy {
   constructor() {
@@ -28,7 +23,48 @@ class UNQfy {
     this._usuarios = [];
     this._newArtistId = 1;
   }
+  
+  //Validators
+  _validarExistenciaArtista(data, field, accion){
+    if(field == "id" && this._artistas.every(artista => artista.id != data)){
+      throw new NonexistentResourceError("Artist", data, accion);
+    }
+    else if(field == "name" && this._artistas.every(artista => artista.name !== data)){
+      throw new NonexistentResourceError("Artist", data, accion);
+    }
+  }
 
+  _validarDisponibilidadNombreArtista(data, accion){
+    if(this._artistas.some(artista => artista.name == data)){
+      throw new ResourceNameTakenError("Artist", data, accion);
+    }
+  }
+
+  _validarExistenciaUsuario(data, accion){
+    if(this._usuarios.every(usuario => usuario.username !== data)){
+      throw new NonexistentResourceError("Usuario", data, accion);
+    }
+  }
+  
+  _validarDisponibilidadNombreUsuario(data, accion){
+    if(this._usuarios.some(usuario => usuario.username == data)){
+      throw new ResourceNameTakenError("Usuario", data, accion);
+    }
+  }
+  
+  _validarExistenciaPlaylist(data, accion){
+    if(this._playlists.every(playlist => playlist.id !== data)){
+      throw new NonexistentResourceError("Playlist", data, accion);
+    }
+  }
+
+  _validarParametros(data, expected){
+    const fields = expected.filter(field => data[field] === undefined);
+    if(fields.length !== 0){
+      throw new InvalidDataError(fields);
+    }
+  }
+ 
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
@@ -39,9 +75,8 @@ class UNQfy {
     - una propiedad name (string)
     - una propiedad country (string)
   */
-    this._validarData(artistData, ["name", "country"]);
-
-    this._validarNombreArtista(artistData.name);
+    this._validarParametros(artistData, ["name", "country"]);
+    this._validarDisponibilidadNombreArtista(artistData.name, "addArtist");
 
     const artistaNuevo = new Artist(
       idManager.idNewArtist(this),
@@ -52,38 +87,11 @@ class UNQfy {
     return artistaNuevo;
   }
 
-  _validarData(data, fields){
-    const invalidFields = fields.filter(field => data[field] === undefined);
-    if(invalidFields.length !== 0){
-      throw new InvalidDataError(invalidFields);
-    }
-  }
-  _validarIdArtista(id) {
-    if (id === undefined){
-      throw new InvalidDataError(["artistId"]);      
-    }
-    else if (this._artistas.every((artist) => artist.id !== id)) {
-      throw new NonexistentArtistError("id", id);
-    } 
-    
-  }
-
-  _validarNombreArtista(name) {
-    if (this._artistas.some((artist) => artist.name.toLowerCase() === name.toLowerCase())) {
-      throw new ArtistNameTakenError(name);
-    }
-  }
-
-  _validarUsername(username) {
-    if (this._usuarios.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
-      throw new UserNameTakenError(username);
-    }
-  }
-
   // id: id del artista a eliminar
   deleteArtist(id) {
-    this._validarIdArtista(id);
     /* Elimina de unqfy el artista con el id indicado */
+    this._validarExistenciaArtista(id, "id", "deleteArtist");
+
     this._artistas = this._artistas.filter((a) => a.id !== id);
     return this._artistas;
   }
@@ -94,8 +102,9 @@ class UNQfy {
   //   artistData.country (string)
   // retorna: el artista actualizado
   updateArtist(artistData) {
-    this._validarData(artistData, ["id", "name", "country"]);
-    this._validarIdArtista(artistData.id);
+    this._validarExistenciaArtista(artistData.id, "id", "updateArtist");
+    this._validarDisponibilidadNombreArtista(artistData.nombre, "updateArtist");
+
     const artistIndex = this._artistas.findIndex(a => a.id === artistData.id);
     const artistToUpdate = this._artistas[artistIndex];
     artistToUpdate._name = artistData.name;
@@ -115,24 +124,26 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
-    this._validarData(albumData, ["name", "year"]);
-    this._validarIdArtista(artistId);
-    const artist = this.getArtistById(artistId);
+    const data = Object.assign(albumData, {id: artistId});
+    this._validarParametros(data, ["id", "name", "name"]);
+    let artist;
+    try{
+      artist = this.getArtistById(artistId);
+    }
+    catch(error){
+      if(error instanceof NonexistentResourceError){
+        error.operation = "addAlbum";
+      }
+      throw error;
+    }
     return artist.addAlbum(albumData);
   }
 
   // id: id del album a eliminar
   deleteAlbum(id) {
     /* Elimina de unqfy el album con el id indicado */
-    try {
-      const albums = this.getArtistById(id).deleteAlbum(id);
-      return albums;
-    }
-    catch(e) {
-      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
-        throw new NonexistentAlbumError(id);
-      }
-    }
+    const albums = this.getArtistById(id).deleteAlbum(id);
+    return albums;
   }
 
   // albumData: objeto JS con los datos necesarios para actualizar un album
@@ -140,22 +151,9 @@ class UNQfy {
   //   albumData.year (int)
   // retorna: el artista actualizado
   updateAlbum(albumData) {
-    // this._validarIdAlbum(albumData.id);
-    try {
-      const artist = this.getArtistById(albumData.id);
-      const albumIndex = artist.albums.findIndex(a => a.id === albumData.id);
-      if(albumIndex === -1) throw new NonexistentAlbumError("id", albumData.id);
-      const albumToUpdate = artist.albums[albumIndex];
-      albumToUpdate._year = albumData.year;
-      artist.albums[albumIndex] = albumToUpdate;
+    const artist = this.getArtistById(albumData.id);
 
-      return albumToUpdate;
-    }
-    catch(e) {
-      if (e instanceof NonexistentArtistError || e instanceof NonexistentAlbumError) {
-        throw new NonexistentAlbumError(albumData.id);
-      }
-    }
+    return artist.updateAlbum(albumData);
   }
 
   // trackData: objeto JS con los datos necesarios para crear un track
@@ -182,13 +180,9 @@ class UNQfy {
   }
 
   getArtistById(id) {
-    const artist = this._artistas.find((a) =>
-      idManager.equalId("artist", id, a.id)
-    );
-    if (artist === undefined) {
-      throw new NonexistentArtistError("id", id);
-    }
-    return artist;
+    const artistId = idManager.getId("artist", id);
+    this._validarExistenciaArtista(artistId, "id", "getArtistById");
+    return this._artistas.find(artista => idManager.equalId("artist", id, artista.id));
   }
 
   getArtists() {
@@ -196,7 +190,7 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-    const artist = this.getArtistById(id);
+    const artist = this.getArtistById(idManager.getId("artist", id));
     return artist.getAlbumById(id);
   }
 
@@ -219,7 +213,7 @@ class UNQfy {
   }
 
   getTrackById(id) {
-    const album = this.getAlbumById(id);
+    const album = this.getAlbumById(idManager.getId("album", id));
     return album.getTrackById(id);
   }
 
@@ -228,11 +222,8 @@ class UNQfy {
   }
 
   getPlaylistById(id) {
-    const playlist = this._playlists.find((p) => p.id === id);
-    if (playlist === undefined) {
-      throw new NonexistentPlaylistError("id", id);
-    }
-    return playlist;
+    this._validarExistenciaPlaylist(id, "getPlaylistById");
+    return this._playlists.find((p) => p.id === id);
   }
 
   // genres: array de generos(strings)
@@ -258,13 +249,11 @@ class UNQfy {
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
+    this._validarExistenciaArtista(artistName, "name","getTracksMatchingArtist");
+
     const artist = this._artistas.find(
       (artista) => artistName === artista.name
     );
-
-    if (artist === undefined) {
-      throw new NonexistentArtistError("name", artistName);
-    }
 
     return artist.albums.flatMap((album) => album.tracks);
   }
@@ -280,6 +269,8 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
     */
+    this._validarParametros({name: name, genres: genresToInclude, duration: maxDuration}, 
+      ["name", "genres", "duration"]);
     const playlist = new Playlist(name);
     artist_loop: for (let i = 0; i < this._artistas.length; i++) {
       const albums = this._artistas[i].albums;
@@ -303,6 +294,7 @@ class UNQfy {
   // id: id del artista a eliminar
   deletePlaylist(id) {
     /* Elimina de unqfy la playlist con el id indicado */
+    this._validarExistenciaPlaylist(id, "deletePlaylist");
     this._playlists = this._playlists.filter((p) => p.id !== id);
     return this._playlists;
   }
@@ -312,6 +304,7 @@ class UNQfy {
   }
 
   createPlaylistWithTracks(name, tracks){
+    this._validarParametros({name: name, tracks: tracks}, ["name", "tracks"]);
     const playlist = new Playlist(name);
     tracks.forEach(trackId => {
       const track = this.getTrackById(trackId);
@@ -325,7 +318,8 @@ class UNQfy {
   // retorna: el nuevo usuario creado
   createUsuario(username) {
     /* Crea un artista y lo agrega a unqfy. */
-    this._validarUsername(username);
+    this._validarParametros({username:username}, ["username"]);
+    this._validarDisponibilidadNombreUsuario(username, "createUsuario");
 
     const usuarioNuevo = new Usuario(username);
     this._usuarios.push(usuarioNuevo);
@@ -333,21 +327,42 @@ class UNQfy {
   }
 
   getUsuario(username) {
+    this._validarExistenciaUsuario(username, "getUsuario");
+
     const user = this._usuarios.find(
       (u) => u.username.toLowerCase() === username.toLowerCase()
     );
-
-    if (user === undefined) {
-      throw new NonexistentUserError(username);
-    }
-
     return user;
+  }
+
+  getUsuarios() {
+    return this._usuarios;
+  }
+
+  // username: username del usuario a eliminar
+  deleteUsuario(username) {
+    /* Elimina de unqfy el usuario con el username indicado */
+    // this._validarExistenciaArtista(id, "id", "deleteArtist");
+
+    this._usuarios = this._usuarios.filter((u) => u.username.toLowerCase() !== username.toLowerCase());
+    return this._usuarios;
+  }
+
+  updateUsuario(username) {
+    this._validarExistenciaUsuario(username, "updateUsuario");
+
+    const usuarioIndex = this._usuarios.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
+    const usuarioToUpdate = this._usuarios[usuarioIndex];
+    usuarioToUpdate._username = username;
+    this._usuarios[usuarioIndex] = usuarioToUpdate;
+    
+    return usuarioToUpdate;
   }
 
   tracksListened(username) {
     const user = this.getUsuario(username);
     const listenedTrackIds = user.tracksListened();
-    return listenedTrackIds.map((trackId) => this.getTrackById(trackId).name);
+    return listenedTrackIds.map((trackId) => this.getTrackById(trackId));
   }
 
   trackTimesListenedByUser(trackId, username) {
@@ -357,7 +372,14 @@ class UNQfy {
 
   listenTrack(trackId, username) {
     const user = this.getUsuario(username);
-    const track = this.getTrackById(trackId);
+    let track;
+    try {
+      track = this.getTrackById(trackId);
+    }
+    catch(err) {
+      if (err instanceof NonexistentResourceError) err.operation = "listenTrack";
+      throw err;
+    }
     user.listenTrack(track);
     return track;
   }
@@ -373,19 +395,18 @@ class UNQfy {
   }
 
   getAlbumsForArtist(artistName) {
+    this._validarExistenciaArtista(artistName, "name", "getAlbumsForArtist");
+
     const artist = this._artistas.find(
       (artista) => artistName === artista.name
     );
-
-    if (artist === undefined) {
-      throw new NonexistentArtistError("name", artistName);
-    }
 
     return artist.albums.map((album) => album.name);
   }
 
   populateAlbumsForArtist(artistName) {
-    unqfyRequester
+    this._validarExistenciaArtista(artistName, "name", "populateAlbumsForArtist");
+    return unqfyRequester
       .requestSpotify("https://api.spotify.com/v1/search", {
         q: artistName,
         type: "artist",
@@ -395,24 +416,27 @@ class UNQfy {
         const artistId = artists[0].id;
         return unqfyRequester.requestSpotify(
           "https://api.spotify.com/v1/artists/" + artistId + "/albums",
-          {}
+          {limit: 50, country: "US"}
         );
       })
       .then((message) => {
         const albums = message.items;
-        const albumsData = albums.map((album) => {
+        let albumsData = albums.map((album) => {
           return {
             name: album.name,
             year: album.release_date.substring(0, 4),
           };
         });
-        const artist = this._artistas.find(
-          (artista) => artista.name == artistName
-        );
-        albumsData.forEach((albumData) => artist.addAlbum(albumData));
-        this.save("data.json");
-      })
-      .catch((error) => console.log(error.message));
+        albumsData = albumsData.filter(albumData => !albumData.name.includes("Deluxe Remastered Version"));
+        const artist = this._artistas.find((artista) => artista.name == artistName);
+        albumsData.forEach((albumData) => {
+          try{
+            artist.addAlbum(albumData);
+          }
+          catch(err){}
+        });
+        return artist;
+      });
   }
 
   save(filename) {
@@ -463,3 +487,4 @@ class UNQfy {
 module.exports = {
   UNQfy: UNQfy,
 };
+

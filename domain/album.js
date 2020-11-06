@@ -3,8 +3,8 @@ const idManager = require("../utils/idManager");
 const MatchingObject = require("../utils/matchingObject");
 
 //Errores
-const NonexistentTrackError = require("../error/nonexistentTrackError");
-const TrackAlreadyOnAlbumError = require("../error/trackAlreadyOnAlbumError");
+const NonexistentResourceError = require("../error/nonexistentResourceError");
+const ResourceNameTakenError   = require("../error/resourceNameTakenError");
 
 class Album extends MatchingObject {
   constructor(id, name, year) {
@@ -15,6 +15,7 @@ class Album extends MatchingObject {
     this._tracks = [];
     this._newTrackId = 1;
   }
+  //Getters
   get id() {
     return this._id;
   }
@@ -27,8 +28,22 @@ class Album extends MatchingObject {
   get tracks() {
     return this._tracks;
   }
+  //Validators
+  _validarDisponibilidadNombreTrack(data, accion) {
+    if (this._tracks.some((track) => track.name == data.name)) {
+      throw new ResourceNameTakenError("Track", name, accion);
+    }
+  }
+  _validarExistenciaTrack(data, accion){
+//    console.log(typeof this._tracks[0].id);
+//	  console.log(typeof data);
+    if(this._tracks.every(track => track.id !== data)){
+      throw new NonexistentResourceError("Track", data, accion);
+    }
+  }
   addTrack(dataTrack) {
-    this._validarTrack(dataTrack);
+    this._validarDisponibilidadNombreTrack(dataTrack.name, "addTrack");
+
     const track = new Track(
       idManager.idNewTrack(this),
       dataTrack.name,
@@ -39,24 +54,20 @@ class Album extends MatchingObject {
     return track;
   }
   deleteTrack(id) {
+    this._validarExistenciaTrack(id, "deleteTrack");
+
     this._tracks = this._tracks.filter((a) => a.id !== id);
     return this._tracks;
-  }
-  _validarTrack(dataTrack) {
-    if (this._tracks.some((track) => track.name === dataTrack.name)) {
-      throw new TrackAlreadyOnAlbumError(dataTrack.name, this._name);
-    }
   }
   newTrackId() {
     return this._newTrackId++;
   }
   getTrackById(id) {
+    this._validarExistenciaTrack(id, "getTrackById");
+
     const track = this._tracks.find((track) =>
       idManager.equalId("track", id, track.id)
     );
-    if (track === undefined) {
-      throw new NonexistentTrackError(id);
-    }
     return track;
   }
   addIfMatchName(dictionary, name) {

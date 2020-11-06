@@ -56,13 +56,24 @@ function main() {
   const command = process.argv[2];
   const parameters = dataFromArgs(process.argv);
   const unqfy = getUNQfy();
-  try{
-    console.log(commandSelector.select(command)(unqfy, parameters));
-  }
-  catch(error){
-    console.log(error.message);
-  }
-  saveUNQfy(unqfy);
+  const resultado = commandSelector.select(command)(unqfy, parameters);
+  Promise.resolve(resultado)
+    .then(res => {
+      console.log(res)
+      saveUNQfy(unqfy)
+    })
+    .catch(error => console.log(error.message));
+  
+  //try{
+  //  resultado = commandSelector.select(command)(unqfy, parameters);
+  //  console.log(resultado);
+  //}
+  //catch(error){
+  //  console.log(error.message);
+  //}
+  //if(!(resultado instanceof Promise)){
+  //  saveUNQfy(unqfy);
+  //}
 }
 
 main();
