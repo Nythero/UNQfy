@@ -1,0 +1,3421 @@
+{
+	"info": {
+		"_postman_id": "8ef0dc35-1cbc-4a05-b43f-f6ea5af6b83f",
+		"name": "UNQfy Copy 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "errors",
+			"item": [
+				{
+					"name": "route not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d65b40c8-39bb-4b8c-bc7f-ff46004273f4",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"route not found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 404,",
+									"        errorCode: \"RESOURCE_NOT_FOUND\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/invalidRoute",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"invalidRoute"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send invalid json",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8e01ed8a-1757-460f-b917-3c6118b0c822",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"invalid json\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 400,",
+									"        errorCode: \"BAD_REQUEST\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Guns n' Roses\",\n  country\": \"USA\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artists/9999 (doesn't exist)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e88e5c1b-9f9a-4b9b-9240-131c89aa6183",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"get inexistent artist\", function () {",
+									"    pm.response.to.have.status(404);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 404,",
+									"        errorCode: \"RESOURCE_NOT_FOUND\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/9999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"9999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add album (artist doesn't exist)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bf25343d-0c6d-4a7b-8d14-fc567ce54f97",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add album to inexistent artist\", function () {",
+									"    pm.response.to.have.status(404);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 404,",
+									"        errorCode: \"RELATED_RESOURCE_NOT_FOUND\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Appetite For Destruction\",\n  \"year\": 1987,\n  \"artistId\": 9999\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add artist (missing required field)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "215edbd9-18ab-4ce5-8530-405ad6307505",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add artist, missing required field\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 400,",
+									"        errorCode: \"BAD_REQUEST\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"country\": \"USA\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "albums/9999 (doesn't exist)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fdcb71a8-60a9-41ec-929d-20c7af7a70b8",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"get inexistent album\", function () {",
+									"    pm.response.to.have.status(404);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 404,",
+									"        errorCode: \"RESOURCE_NOT_FOUND\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums/99999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums",
+								"99999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add album (missing required field)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b0d4045b-28be-44b0-8c80-1e15c85399f4",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add album, missing required field\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 400,",
+									"        errorCode: \"BAD_REQUEST\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Appetite For Destruction\",\n  \"year\": 1987\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete artist (doesn't exist)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4c9549f9-d3b4-40a4-936a-5b54545d41e8",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"delete inexistent artist\", function () {",
+									"    pm.response.to.have.status(404);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 404,",
+									"        errorCode: \"RESOURCE_NOT_FOUND\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/9999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"9999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete album (doesn't exist)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "22fd3131-a4fa-4e55-93ac-c24652b7a335",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"delete inexistent album\", function () {",
+									"    pm.response.to.have.status(404);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 404,",
+									"        errorCode: \"RESOURCE_NOT_FOUND\"",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums/9999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums",
+								"9999"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "artists",
+			"item": [
+				{
+					"name": "filter artists",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3efd2d08-e28d-4d64-af9d-d55debeb69ac",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ec93c90-d19d-4e47-bf55-b51cbb3b3758",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should be empty list\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([]);",
+									"",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists?name=guns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "guns"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all artists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6567d2fd-ce70-4be4-a9f7-f15ece77a9ad",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should be empty list\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([]);",
+									"",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "972c9075-b681-4488-b1ab-4f30cd7ff9ad",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should add artist\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    var artistId = jsonData.id;",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": artistId,",
+									"        \"name\": \"Guns and Roses\",",
+									"        \"albums\": [],",
+									"        \"country\": \"United States\",",
+									"    });",
+									"    pm.environment.set(\"testArtistId\", artistId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "326eba85-3137-4f09-8975-fd82a8c29a45",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Guns and Roses\",\n  \"country\": \"United States\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add duplicated artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc403d1b-1e60-4205-bb36-04fb2c340853",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add artist with the same name\", function () {",
+									"    pm.response.to.have.status(409);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 409,",
+									"        errorCode: \"RESOURCE_ALREADY_EXISTS\"        ",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "740dd8fa-4742-47db-94f6-a1e8cd17cc37",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Guns and Roses\",\n  \"country\": \"United States\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0284d100-cae5-402d-a34a-c2568c8e526a",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should get artist\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": pm.environment.get(\"testArtistId\"),",
+									"        \"name\": \"Guns and Roses\",",
+									"        \"albums\": [],",
+									"        \"country\": \"United States\",",
+									"    });",
+									"    ",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/{{testArtistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"{{testArtistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dfd27afb-0987-4947-bdde-db9bc54d5fd5",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should add artist\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    var artistId = jsonData.id;",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": artistId,",
+									"        \"name\": \"Guns n' Roses\",",
+									"        \"albums\": [],",
+									"        \"country\": \"USA\",",
+									"    });",
+									"    pm.environment.set(\"testArtistId\", artistId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ceebb204-2c45-4e34-a48f-08ef7cb8f8be",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Guns n' Roses\",\n  \"country\": \"USA\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/{{testArtistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"{{testArtistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add another artist ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a397713f-a900-433e-9bb3-d2d46ff403f3",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should add another artist\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    var artistId = jsonData.id;",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": artistId,",
+									"        \"name\": \"Muse\",",
+									"        \"albums\": [],",
+									"        \"country\": \"UK\",",
+									"    });",
+									"    pm.environment.set(\"testArtistId2\", artistId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "34a33e09-5367-4c8a-8679-3f3f9d671bba",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Muse\",\n  \"country\": \"UK\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all artists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "47d582e8-ff74-458e-b7dd-2467e7286aed",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should get two artists\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"        {",
+									"            \"id\": pm.environment.get(\"testArtistId\"),",
+									"            \"name\": \"Guns n' Roses\",",
+									"            \"albums\": [],",
+									"            \"country\": \"USA\",",
+									"        },",
+									"        {",
+									"            \"id\": pm.environment.get(\"testArtistId2\"),",
+									"            \"name\": \"Muse\",",
+									"            \"albums\": [],",
+									"            \"country\": \"UK\",",
+									"        }",
+									"    ]);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter artists guns",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "017bc858-99e0-4baf-8150-4a296cadd064",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "d8399abf-aa58-4c89-bb29-10f70775cf21",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should get list of one artist\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"        {",
+									"            \"id\": pm.environment.get(\"testArtistId\"),",
+									"            \"name\": \"Guns n' Roses\",",
+									"            \"albums\": [],",
+									"            \"country\": \"USA\",",
+									"        }",
+									"    ]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists?name=guns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "guns"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter artists se",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "65bb3dc2-9c0a-42c6-9334-a90441d347a6",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "e4b2fca3-5068-4ace-b1de-39fed1f719c6",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should get two artists\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"        {",
+									"            \"id\": pm.environment.get(\"testArtistId\"),",
+									"            \"name\": \"Guns n' Roses\",",
+									"            \"albums\": [],",
+									"            \"country\": \"USA\",",
+									"        },",
+									"        {",
+									"            \"id\": pm.environment.get(\"testArtistId2\"),",
+									"            \"name\": \"Muse\",",
+									"            \"albums\": [],",
+									"            \"country\": \"UK\",",
+									"        }",
+									"    ]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists?name=se",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "se"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete artist Muse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7dfae93f-6eca-40f1-9aba-e7a6a29bd56a",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should delete artist\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/{{testArtistId2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"{{testArtistId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all artists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "56a1fe0b-2769-4d1f-a1fc-cea804d97b91",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should get one artist\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"        {",
+									"            \"id\": pm.environment.get(\"testArtistId\"),",
+									"            \"name\": \"Guns n' Roses\",",
+									"            \"albums\": [],",
+									"            \"country\": \"USA\",",
+									"        }",
+									"    ]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "albums",
+			"item": [
+				{
+					"name": "all albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9a05e0ab-6927-4638-a849-83279f55c6b7",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"empty albums\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0afa0db0-a252-4ed0-8e41-e4d16ac7383e",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"empty albums\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums?name=destruction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "destruction"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0c52c52e-e6e1-4e1d-b670-7431ecb16cdc",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add album\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    var albumId = jsonData.id;",
+									"    ",
+									"    var expectedAlbum = {",
+									"        \"id\": albumId,",
+									"        \"name\": \"Appetite For Destruction\",",
+									"        \"year\": 2000,",
+									"        \"tracks\":[]",
+									"    };",
+									"    ",
+									"    pm.expect(jsonData).to.be.deep.equal(expectedAlbum);",
+									"    pm.environment.set(\"testAlbumId\", albumId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "af3003a5-70d6-4a25-bdc9-b30ba67e3438",
+								"exec": [
+									"/*",
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"   ",
+									"    var jsonData = pm.response.json();",
+									"    var artistId = jsonData.artistId;",
+									"    ",
+									"    pm.response.to.have.jsonBody({",
+									"        \"name\": \"Appetite For Destruction\",",
+									"        \"year\": 1987,",
+									"        \"artistId\": artistId",
+									"    });",
+									"});",
+									"",
+									"const echoPostRequest = {",
+									"  url: `http://localhost:${port}`,",
+									"  method: 'DELETE',",
+									"  header: '',",
+									"  body: {",
+									"    mode: 'raw',",
+									"    raw: JSON.stringify({ key: 'this is json' })",
+									"  }",
+									"};",
+									"pm.sendRequest(, function (err, response) {",
+									"    console.log(response.json());",
+									"});",
+									"*/"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Appetite For Destruction\",\n  \"year\": 2000,\n  \"artistId\": {{testArtistId}}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add duplicated album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9eb288dc-7276-4857-9652-fc62e49117f0",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add album with the same name\", function () {",
+									"    pm.response.to.have.status(409);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        status: 409,",
+									"        errorCode: \"RESOURCE_ALREADY_EXISTS\"        ",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8f5d0af1-d8db-49fc-b765-4170a4c5d760",
+								"exec": [
+									"/*",
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"   ",
+									"    var jsonData = pm.response.json();",
+									"    var artistId = jsonData.artistId;",
+									"    ",
+									"    pm.response.to.have.jsonBody({",
+									"        \"name\": \"Appetite For Destruction\",",
+									"        \"year\": 1987,",
+									"        \"artistId\": artistId",
+									"    });",
+									"});",
+									"",
+									"const echoPostRequest = {",
+									"  url: `http://localhost:${port}`,",
+									"  method: 'DELETE',",
+									"  header: '',",
+									"  body: {",
+									"    mode: 'raw',",
+									"    raw: JSON.stringify({ key: 'this is json' })",
+									"  }",
+									"};",
+									"pm.sendRequest(, function (err, response) {",
+									"    console.log(response.json());",
+									"});",
+									"*/"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Appetite For Destruction\",\n  \"year\": 2000,\n  \"artistId\": {{testArtistId}}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a65260a0-4351-4644-929f-d25e463d9983",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"get album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": pm.environment.get(\"testAlbumId\"),",
+									"        \"name\": \"Appetite For Destruction\",",
+									"        \"tracks\": [],",
+									"        \"year\": 2000,",
+									"    });",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums/{{testAlbumId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums",
+								"{{testAlbumId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update album (partial)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15f54504-2abe-45ab-b10f-cd23a5f3a453",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"update album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": pm.environment.get(\"testAlbumId\"),",
+									"        \"name\": \"Appetite For Destruction\",",
+									"        \"tracks\": [],",
+									"        \"year\": 1987,",
+									"    });",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"year\": 1987\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums/{{testAlbumId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums",
+								"{{testAlbumId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "406934f3-9d33-4244-99c1-30c046a2383b",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"artist should have 1 album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": pm.environment.get(\"testArtistId\"),",
+									"        \"name\": \"Guns n' Roses\",",
+									"        \"albums\": [",
+									"             {",
+									"                \"id\": pm.environment.get(\"testAlbumId\"),",
+									"                \"name\": \"Appetite For Destruction\",",
+									"                \"year\": 1987,",
+									"                \"tracks\":[]",
+									"            }",
+									"        ],",
+									"        \"country\": \"USA\",",
+									"    });",
+									"    ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/{{testArtistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"{{testArtistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add another album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7285b5d0-efb3-4a24-9f56-dde19a3abd2e",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"add album\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    var albumId = jsonData.id;",
+									"    ",
+									"    var expectedAlbum = {",
+									"        \"id\": albumId,",
+									"        \"name\": \"Use Your Illusion 1\",",
+									"        \"year\": 1992,",
+									"        \"tracks\":[]",
+									"    };",
+									"    ",
+									"    pm.expect(jsonData).to.be.deep.equal(expectedAlbum);",
+									"    pm.environment.set(\"testAlbumId2\", albumId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "44792055-4589-47fa-9011-567bfe3bdd1a",
+								"exec": [
+									"/*",
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"   ",
+									"    var jsonData = pm.response.json();",
+									"    var artistId = jsonData.artistId;",
+									"    ",
+									"    pm.response.to.have.jsonBody({",
+									"        \"name\": \"Appetite For Destruction\",",
+									"        \"year\": 1987,",
+									"        \"artistId\": artistId",
+									"    });",
+									"});",
+									"",
+									"const echoPostRequest = {",
+									"  url: `http://localhost:${port}`,",
+									"  method: 'DELETE',",
+									"  header: '',",
+									"  body: {",
+									"    mode: 'raw',",
+									"    raw: JSON.stringify({ key: 'this is json' })",
+									"  }",
+									"};",
+									"pm.sendRequest(, function (err, response) {",
+									"    console.log(response.json());",
+									"});",
+									"*/"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Use Your Illusion 1\",\n  \"year\": 1992,\n  \"artistId\": {{testArtistId}}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter albums illusion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b68bc4f-7b59-4d22-877c-c161f4983c52",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should be one album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"        {",
+									"        \"id\": pm.environment.get(\"testAlbumId2\"),",
+									"        \"name\": \"Use Your Illusion 1\",",
+									"        \"year\": 1992,",
+									"        \"tracks\": [],",
+									"    }]);",
+									"    ",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums?name=illusion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "illusion"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8ac0477b-06bb-4d6d-be6f-6dfb94c39897",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should be two album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"       {",
+									"            \"id\": pm.environment.get(\"testAlbumId\"),",
+									"            \"name\": \"Appetite For Destruction\",",
+									"            \"year\": 1987,",
+									"            \"tracks\":[]",
+									"        },",
+									"        {",
+									"            \"id\": pm.environment.get(\"testAlbumId2\"),",
+									"            \"name\": \"Use Your Illusion 1\",",
+									"            \"year\": 1992,",
+									"            \"tracks\": [],",
+									"        }",
+									"    ]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c1540609-8c6d-4303-8de8-40caa2193464",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"artist should have 2 albums\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": pm.environment.get(\"testArtistId\"),",
+									"        \"name\": \"Guns n' Roses\",",
+									"        \"albums\": [",
+									"             {",
+									"                \"id\": pm.environment.get(\"testAlbumId\"),",
+									"                \"name\": \"Appetite For Destruction\",",
+									"                \"year\": 1987,",
+									"                \"tracks\":[]",
+									"            },",
+									"            {",
+									"                \"id\": pm.environment.get(\"testAlbumId2\"),",
+									"                \"name\": \"Use Your Illusion 1\",",
+									"                \"year\": 1992,",
+									"                \"tracks\": [],",
+									"            }",
+									"        ],",
+									"        \"country\": \"USA\",",
+									"    });",
+									"    ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/{{testArtistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"{{testArtistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0c076aed-46e6-491e-b4bf-102f3e1d043f",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"delete album\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums/{{testAlbumId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums",
+								"{{testAlbumId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0957c2fb-5356-477f-ac85-c555ac2dddf7",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"artist should have one album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"id\": pm.environment.get(\"testArtistId\"),",
+									"        \"name\": \"Guns n' Roses\",",
+									"        \"albums\": [",
+									"            {",
+									"                \"id\": pm.environment.get(\"testAlbumId2\"),",
+									"                \"name\": \"Use Your Illusion 1\",",
+									"                \"year\": 1992,",
+									"                \"tracks\": [],",
+									"            }",
+									"        ],",
+									"        \"country\": \"USA\",",
+									"    });",
+									"    ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists/{{testArtistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists",
+								"{{testArtistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dddd0d18-c4c5-4129-87e1-88cb958d44d9",
+								"type": "text/javascript",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"should be one album\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.deep.equal([",
+									"        {",
+									"            \"id\": pm.environment.get(\"testAlbumId2\"),",
+									"            \"name\": \"Use Your Illusion 1\",",
+									"            \"year\": 1992,",
+									"            \"tracks\": [],",
+									"        }",
+									"    ]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "lyrics",
+			"item": [
+				{
+					"name": "add artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1b3e883b-ee48-45da-ba29-0fa6c92f1ee5",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should add artist\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var artistId = jsonData.id;\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"id\": artistId,\r",
+									"        \"name\": \"Queen\",\r",
+									"        \"albums\": [],\r",
+									"        \"country\": \"UK\",\r",
+									"    });\r",
+									"    pm.environment.set(\"queenId\", artistId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Queen\",\r\n    \"country\" : \"UK\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/artists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "62c6163f-0e5e-49b5-a3d4-71dacc0f072e",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should add album\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var albumId = jsonData.id;\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"id\": albumId,\r",
+									"        \"name\": \"Innuendo\",\r",
+									"        \"year\": 1990,\r",
+									"        \"tracks\":[]\r",
+									"    });\r",
+									"    pm.environment.set(\"innuendoId\", albumId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"artistId\":{{queenId}},\r\n    \"name\":\"Innuendo\",\r\n    \"year\":1990\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/albums/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"albums",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add track",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "383352be-9fab-4f4a-a505-73c90e9de052",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"add track\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var trackId = jsonData.id;\r",
+									"    \r",
+									"    var expectedTrack = {\r",
+									"        \"id\": trackId,\r",
+									"        \"name\": \"Innuendo\",\r",
+									"        \"duration\": 390,\r",
+									"        \"genres\":[\"Rock\"],\r",
+									"        \"timesListened\":0\r",
+									"    };\r",
+									"    \r",
+									"    pm.expect(jsonData).to.be.deep.equal(expectedTrack);\r",
+									"    pm.environment.set(\"testTrackId\", trackId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"albumId\":{{innuendoId}},\r\n    \"name\":\"Innuendo\",\r\n    \"duration\":390,\r\n    \"genres\":[\"Rock\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/tracks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "lyrics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6134b88f-e349-478f-93aa-025d2e2fb5b2",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"get lyrics\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var lyrics = \"While the sun hangs in the sky and the desert has sand\\nWhile the waves crash in the sea and meet the land\\nWhile there's a wind and the stars and the rainbow\\nTill the mountains crumble into the plain\\nOh yes we'll keep on tryin'\\nTread that fine line\\nOh we'll keep on tryin' yeah\\nJust passing our time\\nWhile we live according to race, colour or creed\\nWhile we rule by blind madness and pure greed\\nOur lives dictated by tradition, superstition, false\\nReligion\\nThrough the eons, and on and on\\nOh yes we'll keep on tryin'\\n...\\n\\n******* This Lyrics is NOT for Commercial use *******\\n(1409620748491)\"\r",
+									"\r",
+									"\r",
+									"    var expectedTrack = {\r",
+									"        \"name\": \"Innuendo\",\r",
+									"        \"lyrics\": lyrics\r",
+									"    };\r",
+									"    \r",
+									"    pm.expect(jsonData).to.be.deep.equal(expectedTrack);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/tracks/{{testTrackId}}/lyrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"tracks",
+								"{{testTrackId}}",
+								"lyrics"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "688dfed1-44a9-4419-acb5-0d0e26f48d6f",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should be empty list\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.deep.equal([]);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4e20b7ed-d80f-418a-8f93-026a3649aac0",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should add user\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var username = jsonData.username;\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"username\":\"Agustin\"\r",
+									"    });\r",
+									"    pm.environment.set(\"testUsername\", username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Agustin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add duplicated user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4124f438-16ed-45e4-8da4-c458349d9585",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"add user with the same name\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        status: 409,\r",
+									"        errorCode: \"RESOURCE_ALREADY_EXISTS\"        \r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Agustin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "60345792-9a23-4162-9385-3491f4555911",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get user\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"username\": pm.environment.get(\"testUsername\")\r",
+									"    });\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users/{{testUsername}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"{{testUsername}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3adb952-9476-4e83-94f6-ade53ef5eda1",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"update user\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"    var jsonData = pm.response.json();",
+									"    var username = jsonData.username;",
+									"",
+									"    pm.expect(jsonData).to.be.deep.equal({",
+									"        \"username\": pm.environment.get(\"testUsername\")",
+									"    });",
+									"",
+									"    pm.environment.set(\"testUsername\", username);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"Agus\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users/{{testUsername}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"{{testUsername}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "546e40f4-2b60-450c-9442-0cff254723c1",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should add user\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var username = jsonData.username;\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"username\":\"Nicolas\"\r",
+									"    });\r",
+									"    pm.environment.set(\"testUsername2\", username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Nicolas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e43e2d73-a81e-4812-b825-d3690968e527",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get two users\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.deep.equal([\r",
+									"        {\r",
+									"            \"username\": pm.environment.get(\"testUsername\")\r",
+									"        },\r",
+									"        {\r",
+									"            \"username\": pm.environment.get(\"testUsername2\"),\r",
+									"        }\r",
+									"    ]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c5cfae09-9c77-4a84-b8b0-00c45dff565b",
+								"exec": [
+									"const chai = require('chai');",
+									"chai.config.truncateThreshold = 0;",
+									"",
+									"pm.test(\"delete user\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users/{{testUsername}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"{{testUsername}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "760c9ee3-aebc-4c01-b699-95b7597b51d5",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get one user\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.deep.equal([\r",
+									"        {\r",
+									"            \"username\": pm.environment.get(\"testUsername2\"),\r",
+									"        }\r",
+									"    ]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listened tracks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fec0f428-5b3b-43e4-96b1-3c6d2a15d1f3",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get user\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([]);\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users/{{testUsername2}}/tracks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"{{testUsername2}}",
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listen track",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "febe27c1-77dd-43cc-85db-b68e17094281",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should listen track\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    var expectedTrack = {\r",
+									"        \"id\": pm.environment.get(\"testTrackId\"),\r",
+									"        \"name\": \"Innuendo\",\r",
+									"        \"duration\": 390,\r",
+									"        \"genres\":[\"Rock\"],\r",
+									"        \"timesListened\":1\r",
+									"    };\r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal(expectedTrack);\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"trackId\":{{testTrackId}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users/{{testUsername2}}/tracks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"{{testUsername2}}",
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listened tracks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ca85cff-66da-4d58-bd9e-823667ca05fd",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get user\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([\r",
+									"        {\r",
+									"        \"id\": 6209,\r",
+									"        \"name\": \"Innuendo\",\r",
+									"        \"duration\": 390,\r",
+									"        \"genres\": [\r",
+									"            \"Rock\"\r",
+									"        ],\r",
+									"        \"timesListened\": 1\r",
+									"        }\r",
+									"    ]);\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/users/{{testUsername2}}/tracks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"{{testUsername2}}",
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "playlist",
+			"item": [
+				{
+					"name": "all playlists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9cba5adb-03db-4a66-b107-f86ef3b864fc",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get empty list\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([]);\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create playlist with tracks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "729ae8f4-7fd1-4436-8b96-8a0bbc5ab831",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should add playlist\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var playlistId = jsonData.id;    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"id\": 1,\r",
+									"        \"name\": \"InnuendoPL\",\r",
+									"        \"duration\": 390,\r",
+									"        \"tracks\": [\r",
+									"            {\r",
+									"                \"id\": 6209,\r",
+									"                \"name\": \"Innuendo\",\r",
+									"                \"duration\": 390,\r",
+									"                \"genres\": [\r",
+									"                    \"Rock\"\r",
+									"                ],\r",
+									"                \"timesListened\": 1\r",
+									"            }\r",
+									"        ]\r",
+									"    });\r",
+									"    \r",
+									"    pm.environment.set(\"testPlaylistId\", playlistId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"InnuendoPL\",\r\n    \"tracks\":[{{testTrackId}}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "playlist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2bdd350e-7335-4cae-b08c-01ade9671016",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get empty list\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var expected = {\r",
+									"        \"id\": 1,\r",
+									"        \"name\": \"InnuendoPL\",\r",
+									"        \"duration\": 390,\r",
+									"        \"tracks\": [\r",
+									"            {\r",
+									"                \"id\": 6209,\r",
+									"                \"name\": \"Innuendo\",\r",
+									"                \"duration\": 390,\r",
+									"                \"genres\": [\r",
+									"                    \"Rock\"\r",
+									"                ],\r",
+									"                \"timesListened\": 1\r",
+									"            }\r",
+									"        ]\r",
+									"    };\r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal(expected);\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/{{testPlaylistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								"{{testPlaylistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all playlists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0cddb63d-1a45-4900-b381-b067ae0a7e38",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should have one playlist\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([\r",
+									"    {\r",
+									"        \"id\": 1,\r",
+									"        \"name\": \"InnuendoPL\",\r",
+									"        \"duration\": 390,\r",
+									"        \"tracks\": [\r",
+									"            {\r",
+									"                \"id\": 6209,\r",
+									"                \"name\": \"Innuendo\",\r",
+									"                \"duration\": 390,\r",
+									"                \"genres\": [\r",
+									"                    \"Rock\"\r",
+									"                ],\r",
+									"                \"timesListened\": 1\r",
+									"            }\r",
+									"        ]\r",
+									"    }\r",
+									"])});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create playlist with params",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "621a5832-3b41-4fbc-92d1-6da5949bfe8e",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should add playlist\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    var playlistId = jsonData.id;    \r",
+									"\r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal({\r",
+									"        \"id\": 5,\r",
+									"        \"name\": \"Vacia\",\r",
+									"        \"duration\": 0,\r",
+									"        \"tracks\": []\r",
+									"    });\r",
+									"        \r",
+									"    pm.environment.set(\"testPlaylistId2\", playlistId);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Vacia\",\r\n    \"maxDuration\":0,\r\n    \"genres\":[]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all playlists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5efcf60b-b3f8-44b7-b7b3-895f51755419",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should have two playlists\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([\r",
+									"    {\r",
+									"        \"id\": 1,\r",
+									"        \"name\": \"InnuendoPL\",\r",
+									"        \"duration\": 390,\r",
+									"        \"tracks\": [\r",
+									"            {\r",
+									"                \"id\": 6209,\r",
+									"                \"name\": \"Innuendo\",\r",
+									"                \"duration\": 390,\r",
+									"                \"genres\": [\r",
+									"                    \"Rock\"\r",
+									"                ],\r",
+									"                \"timesListened\": 1\r",
+									"            }\r",
+									"        ]\r",
+									"    },\r",
+									"    {\r",
+									"        \"id\":5,\r",
+									"        \"name\":\"Vacia\",\r",
+									"        \"duration\":0,\r",
+									"        \"tracks\":[]\r",
+									"    }])\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "playlists with duration lower than 10",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "81108843-5b03-4ef5-93d8-5d738c2450f4",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should get empty list\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([{\r",
+									"        \"id\": 5,\r",
+									"        \"name\": \"Vacia\",\r",
+									"        \"duration\": 0,\r",
+									"        \"tracks\": []\r",
+									"    }]);\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/?durationLT=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							],
+							"query": [
+								{
+									"key": "durationLT",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "playlist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "96f4e044-57f2-4d8f-8f1b-f945206cc956",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should delete playlist\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/{{testPlaylistId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								"{{testPlaylistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all playlists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8f45e3e8-d59e-4bbf-815d-6343215ae551",
+								"exec": [
+									"const chai = require('chai');\r",
+									"chai.config.truncateThreshold = 0;\r",
+									"\r",
+									"pm.test(\"should have one playlist\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"\r",
+									"    pm.expect(jsonData).to.be.deep.equal([\r",
+									"    {\r",
+									"        \"id\":5,\r",
+									"        \"name\":\"Vacia\",\r",
+									"        \"duration\":0,\r",
+									"        \"tracks\":[]\r",
+									"    }])\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port}}/api/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
