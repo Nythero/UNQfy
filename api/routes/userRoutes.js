@@ -4,13 +4,12 @@ const UserDto = require("../dtos/userDto");
 const TrackDto = require("../dtos/trackDto");
 
 router.get("/", (req, res) => {
-  const username = req.query.name;
+  let username = req.query.username;
+  username = username === undefined ? "" : username.toLowerCase();
 
-  const contains = (artist) =>
-    username === undefined ||
-    artist.name.toLowerCase().includes(username.toLowerCase());
-
-  const users = req.body.unqfy.getUsuarios().filter((u) => contains(u));
+  const users = req.body.unqfy
+    .getUsuarios()
+    .filter((u) => u.username.toLowerCase().includes(username));
   res.send(users.map((a) => UserDto.map(a)));
 });
 
@@ -29,39 +28,35 @@ router.post("/", (req, res) => {
   res.send(UserDto.map(userCreated));
 });
 
-// router.delete("/:id", (req, res) => {
-//   const body = req.body;
-//   const id = parseInt(req.params.id);
-//   body.unqfy.deleteAlbum(id);
-//   body.unqfy.save(body.dataPath);
+router.delete("/:username", (req, res) => {
+  const body = req.body;
+  const username = req.params.username;
+  body.unqfy.deleteUsuario(username);
+  body.unqfy.save(body.dataPath);
 
-//   res.status(204).send();
-// });
+  res.status(204).send();
+});
 
-// router.patch("/:id", (req, res) => {
-//   const body = req.body;
-//   const id = parseInt(req.params.id);
-//   const albumUpdated = body.unqfy.updateAlbum({
-//     id: id,
-//     name: body.name,
-//     year: body.year,
-//   });
-//   body.unqfy.save(body.dataPath);
+router.patch("/:username", (req, res) => {
+  const body = req.body;
+  const username = req.params.username;
+  const usuarioUpdated = body.unqfy.updateUsuario(username);
+  body.unqfy.save(body.dataPath);
 
-//   res.status(200);
-//   res.send(UserDto.map(albumUpdated));
-// });
+  res.status(200);
+  res.send(UserDto.map(usuarioUpdated));
+});
 
 router.get("/:username/tracks", (req, res) => {
   const username = req.params.username;
   const unqfy = req.body.unqfy;
   const tracksListened = unqfy.tracksListened(username);
-  res.status(200).send(tracksListened.map(track => TrackDto.map(track)));
+  res.status(200).send(tracksListened.map((track) => TrackDto.map(track)));
 });
 
 router.post("/:username/tracks", (req, res) => {
   const username = req.params.username;
-  const trackId  = parseInt(req.body.trackId);
+  const trackId = parseInt(req.body.trackId);
   const unqfy = req.body.unqfy;
   const track = unqfy.listenTrack(trackId, username);
   unqfy.save(req.body.dataPath);

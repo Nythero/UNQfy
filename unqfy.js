@@ -339,6 +339,26 @@ class UNQfy {
     return this._usuarios;
   }
 
+  // username: username del usuario a eliminar
+  deleteUsuario(username) {
+    /* Elimina de unqfy el usuario con el username indicado */
+    // this._validarExistenciaArtista(id, "id", "deleteArtist");
+
+    this._usuarios = this._usuarios.filter((u) => u.username.toLowerCase() !== username.toLowerCase());
+    return this._usuarios;
+  }
+
+  updateUsuario(username) {
+    this._validarExistenciaUsuario(username, "updateUsuario");
+
+    const usuarioIndex = this._usuarios.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
+    const usuarioToUpdate = this._usuarios[usuarioIndex];
+    usuarioToUpdate._username = username;
+    this._usuarios[usuarioIndex] = usuarioToUpdate;
+    
+    return usuarioToUpdate;
+  }
+
   tracksListened(username) {
     const user = this.getUsuario(username);
     const listenedTrackIds = user.tracksListened();
@@ -407,16 +427,16 @@ class UNQfy {
             year: album.release_date.substring(0, 4),
           };
         });
-	albumsData = albumsData.filter(albumData => !albumData.name.includes("Deluxe Remastered Version"));
+        albumsData = albumsData.filter(albumData => !albumData.name.includes("Deluxe Remastered Version"));
         const artist = this._artistas.find((artista) => artista.name == artistName);
         albumsData.forEach((albumData) => {
-	  try{
-	    artist.addAlbum(albumData)
-	  }
-	  catch(err){}
-	});
-	return artist
-      })
+          try{
+            artist.addAlbum(albumData);
+          }
+          catch(err){}
+        });
+        return artist;
+      });
   }
 
   save(filename) {
