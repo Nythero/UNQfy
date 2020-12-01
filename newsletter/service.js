@@ -10,6 +10,7 @@ const notifyRoutes = require("./routes/notifyRoutes");
 const subscriptionRoutes = require("./routes/subscriptionRoutes");
 
 const handleErrors = require("../api/middlewares/handleErrors");
+const observerManager = require("../newsletter/middlewares/observerManagerMiddleware");
 
 app.use(bodyParser.json());
 
@@ -22,6 +23,8 @@ const badParsingError = (err, req, res, next) => {
 };
 
 app.use(badParsingError);
+
+app.use(observerManager);
 
 const api = '/api';
 
