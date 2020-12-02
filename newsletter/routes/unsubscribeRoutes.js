@@ -4,9 +4,10 @@ const router = express.Router();
 // Desuscribir un email
 router.post("/", (req, res) => {
   const body = req.body;
-  body.observerManager.unsubscribe(body.artistId, body.email);
+  const artistId = parseInt(body.artistId);
+  body.observerManager.unsubscribe(artistId, body.email);
 
-  res.send(body.observerManager.getSubscriptions(body.artistId));
+  res.send(body.observerManager.getSubscriptions(artistId));
 });
 
 module.exports = router;

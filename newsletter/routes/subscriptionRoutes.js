@@ -3,19 +3,19 @@ const router = express.Router();
 
 // Obtener todos los emails suscritos a un artista
 router.get("/", (req, res) => {
-  let artistId = req.query.artistId;
-  // const subscriptors = unqfyAPI.getArtistSubs(artistId);
+  const artistId = parseInt(req.query.artistId);
+  const subscriptors = req.body.observerManager.getSubscriptions(artistId);
   res.send({
     artistId: artistId,
-    subscriptors: ["nico@mail.com", "agus@mail.com"],
+    subscriptors: subscriptors,
   });
 });
 
 // Eliminar todos los emails suscritos a un artista
 router.delete("/", (req, res) => {
     const artistId = parseInt(req.body.artistId);
-  
-    res.send(artistId);
+    req.body.observerManager.deleteSubscriptions(artistId);
+    res.send();
   });
 
 module.exports = router;

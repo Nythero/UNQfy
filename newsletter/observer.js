@@ -3,8 +3,8 @@ class Observer {
         this.email = email;
     }
 
-    notify(subject, message) {
-        this.email.send(subject, message);
+    sendEmail(subject, message) {
+        console.log(`Subject: ${subject} - Body: ${message}`);
     }
 }
 

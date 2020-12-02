@@ -29,7 +29,7 @@ class ObserverManager {
   notify(artistId, subject, message) {
     const toNotify = this.observers.get(artistId);
     toNotify.forEach((obs) => {
-      obs.notify(subject, message);
+      obs.sendEmail(subject, message);
     });
   }
 

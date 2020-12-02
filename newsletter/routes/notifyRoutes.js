@@ -4,12 +4,12 @@ const router = express.Router();
 // Notificar a los usuarios suscritos 
 router.post("/", (req, res) => {
   const body = req.body;
+  const artistId = parseInt(body.artistId);
+  const subject = body.subject;
+  const message = body.message;
 
-  res.send({
-    artistId: body.artistId,
-    subject: "Nuevo Album para artsta Chano",
-    message: "Se ha agregado el album XXX al artista Chano",
-  });
+  req.body.observerManager.notify(artistId, subject, message);
+  res.send();
 });
 
 module.exports = router;
