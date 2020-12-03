@@ -1,0 +1,14 @@
+{
+  "name": "logging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "invalidLogError.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "winston-loggly-bulk": "^3.1.1"
+  }
+}
