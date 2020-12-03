@@ -3,7 +3,7 @@ const Observer = require("./observer");
 class ObserverManager {
 
   constructor() {
-    if (!!ObserverManager.instance) {
+    if (ObserverManager.instance) {
         return ObserverManager.instance;
     }
     ObserverManager.instance = this;
