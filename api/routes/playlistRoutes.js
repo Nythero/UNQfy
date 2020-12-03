@@ -3,7 +3,7 @@ const router = express.Router();
 const PlaylistDto = require("../dtos/playlistDto");
 
 //Crear Playlist
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   const unqfy = req.body.unqfy;
   let playlist;
   if(req.body.tracks !== undefined){
@@ -14,6 +14,9 @@ router.post('/', (req, res) => {
   }
   unqfy.save(req.body.dataPath);
   res.status(201).send(PlaylistDto.map(playlist));
+
+  res.locals.message = "La Playlist " + playlist.id + " fue creada";
+  next();
 });
 
 //Obtener Playlist
@@ -25,12 +28,15 @@ router.get('/:id', (req, res) => {
 });
 
 //Eliminar Playlist
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
   const id = parseInt(req.params.id);
   const unqfy = req.body.unqfy;
   unqfy.deletePlaylist(id);
   unqfy.save(req.body.dataPath);
   res.status(204).send();
+
+  res.locals.message = "La Playlist " + id + " fue eliminada";
+  next();
 });
 
 //Buscar Playlist

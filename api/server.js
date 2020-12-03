@@ -9,20 +9,14 @@ const trackRoutes  = require('./routes/trackRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 const albumRoutes = require('./routes/albumRoutes');
 const userRoutes = require('./routes/userRoutes');
+const defaultRoute = require('./routes/defaultRoute');
 
 const handleErrors = require("../api/middlewares/handleErrors");
 const unqfy = require("../api/middlewares/unqfy");
+const badParsingError = require("../api/middlewares/badParsing");
+const notify = require("../api/middlewares/notification.js");
 
 app.use(bodyParser.json());
-
-const badParsingError = (err,req, res, next) => {
-  if(err.type == 'entity.parse.failed'){
-    res.status(400).send({status:400, errorCode:"BAD_REQUEST"})
-  }
-  else{
-    next(err);
-  }
-};
 
 app.use(badParsingError);
 
@@ -35,12 +29,8 @@ app.use(api + '/tracks', trackRoutes);
 app.use(api + '/playlists', playlistRoutes);
 app.use(api + '/albums', albumRoutes);
 app.use(api + '/users', userRoutes);
-app.all('*', (req, res) => {
-  res.status(404).send({
-    status: 404,
-    errorCode: "RESOURCE_NOT_FOUND"
-  });
-});
+app.use('*', notify);
+app.use('*', defaultRoute);
 app.use(handleErrors);
 
 app.listen(port, () => {

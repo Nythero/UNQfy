@@ -12,7 +12,7 @@ router.get("/:trackId/lyrics", (req, res, next) => {
     .catch((err) => {next(err)});
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   const id = req.body.albumId;
   const trackData = {
     name : req.body.name,
@@ -23,6 +23,9 @@ router.post("/", (req, res) => {
   const track = unqfy.addTrack(id, trackData);
   unqfy.save(req.body.dataPath);
   res.status(201).send(TrackDto.map(track));
+
+  res.locals.message = "La Playlist " + track.id + " fue creada";
+  next();
 });
 
 module.exports = router;

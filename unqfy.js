@@ -342,18 +342,17 @@ class UNQfy {
   // username: username del usuario a eliminar
   deleteUsuario(username) {
     /* Elimina de unqfy el usuario con el username indicado */
-    // this._validarExistenciaArtista(id, "id", "deleteArtist");
-
+    this._validarExistenciaUsuario(username, "deleteUsuario");
     this._usuarios = this._usuarios.filter((u) => u.username.toLowerCase() !== username.toLowerCase());
     return this._usuarios;
   }
 
-  updateUsuario(username) {
+  updateUsuario(username, newUsername) {
     this._validarExistenciaUsuario(username, "updateUsuario");
 
     const usuarioIndex = this._usuarios.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
     const usuarioToUpdate = this._usuarios[usuarioIndex];
-    usuarioToUpdate._username = username;
+    usuarioToUpdate.username = newUsername;
     this._usuarios[usuarioIndex] = usuarioToUpdate;
     
     return usuarioToUpdate;
