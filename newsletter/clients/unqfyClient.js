@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
 
 class UnqfyClient {
   constructor() {
-    if (!UnqfyClient.instance) {
+    if (UnqfyClient.instance) {
       return UnqfyClient.instance;
     }
     UnqfyClient.instance = this;
