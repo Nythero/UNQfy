@@ -1,6 +1,5 @@
 const express = require("express");
 const app     = express();
-const port    = 4000;
 const logManager = require("../logManager");
 const bodyParser = require("body-parser");
 const errorHandling = require("../../api/middlewares/handleErrors");
@@ -27,6 +26,4 @@ app.use(defaultRoute)
 
 app.use(errorHandling);
 
-app.listen(port, () => {
-  console.log(`Logging app listening at http://localhost:${port}`);
-});
+module.exports = app;
