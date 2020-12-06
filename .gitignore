@@ -1,6 +1,10 @@
 # Database
 data.json
 
+# Google API token
+credentials.json
+token.json
+
 # Logs
 logs
 *.log
