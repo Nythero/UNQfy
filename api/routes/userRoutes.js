@@ -19,32 +19,42 @@ router.get("/:username", (req, res) => {
   res.send(UserDto.map(user));
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   const body = req.body;
   const userCreated = body.unqfy.createUsuario(body.username);
   body.unqfy.save(body.dataPath);
 
   res.status(201);
   res.send(UserDto.map(userCreated));
+
+  res.locals.message = "El Usuario " + userCreated.username + " fue creado";
+  next();
 });
 
-router.delete("/:username", (req, res) => {
+router.delete("/:username", (req, res, next) => {
   const body = req.body;
   const username = req.params.username;
   body.unqfy.deleteUsuario(username);
   body.unqfy.save(body.dataPath);
 
   res.status(204).send();
+ 
+  res.locals.message = "El Usuario " + username + " fue eliminado";
+  next();
 });
 
-router.patch("/:username", (req, res) => {
+router.patch("/:username", (req, res, next) => {
   const body = req.body;
   const username = req.params.username;
-  const usuarioUpdated = body.unqfy.updateUsuario(username);
+  const newUsername = body.username;
+  const usuarioUpdated = body.unqfy.updateUsuario(username, newUsername);
   body.unqfy.save(body.dataPath);
 
   res.status(200);
   res.send(UserDto.map(usuarioUpdated));
+
+  res.locals.message = "El Usuario " + username + " fue actualizado a " + newUsername;
+  next();
 });
 
 router.get("/:username/tracks", (req, res) => {

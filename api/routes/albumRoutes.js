@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AlbumDto = require("../dtos/albumDto");
+const NotificationData = require("../utils/notificationData");
 
 router.get("/", (req, res) => {
   
@@ -16,7 +17,7 @@ router.get("/:id", (req, res) => {
   res.send(AlbumDto.map(album));
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   const body = req.body;
   const albumCreated = body.unqfy.addAlbum(body.artistId, {
     name: body.name,
@@ -26,18 +27,24 @@ router.post("/", (req, res) => {
 
   res.status(201);
   res.send(AlbumDto.map(albumCreated));
+  
+  res.locals.message = "El Album " + albumCreated.id + " fue creado";
+  next();
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
   const body = req.body;
   const id = parseInt(req.params.id);
   body.unqfy.deleteAlbum(id);
   body.unqfy.save(body.dataPath);
 
   res.status(204).send();
+  
+  res.locals.message = "El Album " + id + " fue eliminado";
+  next();
 });
 
-router.patch("/:id", (req, res) => {
+router.patch("/:id", (req, res, next) => {
   const body = req.body;
   const id = parseInt(req.params.id);
   const albumUpdated = body.unqfy.updateAlbum({
@@ -49,6 +56,9 @@ router.patch("/:id", (req, res) => {
 
   res.status(200);
   res.send(AlbumDto.map(albumUpdated));
+
+  res.locals.message = "El Album " + id + " fue actualizado";
+  next();
 });
 
 module.exports = router;

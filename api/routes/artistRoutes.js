@@ -9,9 +9,7 @@ router.get("/", (req, res) => {
   
   const artists = req.body.unqfy
     .getArtists()
-    .filter((a) => contains(a));/*
-  const artistName = req.query.name.toLowerCase();
-  const artists = req.body.unqfy.searchArtists(artistName);*/
+    .filter((a) => contains(a));
   res.send(artists.map((a) => ArtistDto.map(a)));
 });
 
@@ -21,7 +19,7 @@ router.get("/:id", (req, res) => {
   res.send(ArtistDto.map(artist));
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   const body = req.body;
   const artistCreated = body.unqfy.addArtist({
     name: body.name,
@@ -31,18 +29,24 @@ router.post("/", (req, res) => {
 
   res.status(201);
   res.send(ArtistDto.map(artistCreated));
+
+  res.locals.message = "El Artista " + artistCreated.id + " fue creado";
+  next();
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
   const body = req.body;
   const id = parseInt(req.params.id);
   body.unqfy.deleteArtist(id);
   body.unqfy.save(body.dataPath);
 
   res.status(204).send();
+
+  res.locals.message = "El Artista " + id + " fue eliminado";
+  next();
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", (req, res, next) => {
   const body = req.body;
   const id = parseInt(req.params.id);
   const artistUpdated = body.unqfy.updateArtist({
@@ -52,8 +56,10 @@ router.put("/:id", (req, res) => {
   });
   body.unqfy.save(body.dataPath);
 
-  res.status(200);
-  res.send(ArtistDto.map(artistUpdated));
+  res.status(200).send(ArtistDto.map(artistUpdated));
+
+  res.locals.message = "El Artista " + id + " fue actualizado";
+  next();
 });
 
 module.exports = router;
