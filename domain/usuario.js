@@ -6,6 +6,9 @@ class Usuario {
   get username(){
     return this._username;
   }
+  set username(username){
+    this._username = username;
+  }
   tracksListened(){
     return Object.keys(this._tracksListened).map(id => parseInt(id));
   }
