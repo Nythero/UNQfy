@@ -20,7 +20,7 @@ const nameToErrorCode = (err) => {
   if (err.name.includes("NameTaken")){
     return "RESOURCE_ALREADY_EXISTS";
   }
-  else if(err.name.includes("Invalid")){
+  else if(err.name.includes("Invalid") || err.getCode() === 400){
     return "BAD_REQUEST";
   }
   else if(err.name.includes("Nonexistent")){
