@@ -1,4 +1,4 @@
-const { BadRequest } = require("../api/utils/errors");
+const { BadRequest } = require("./errors");
 
 class InvalidLogError extends BadRequest{
   constructor(){

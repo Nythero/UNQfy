@@ -1,5 +1,5 @@
 const readLine = require('readline');
-const app      = require('./api/server.js');
+const app      = require('./server.js');
 const port = 4000;
 
 const ON  = "server on";

@@ -1,10 +1,10 @@
 const express = require("express");
 const app     = express();
-const logManager = require("../logManager");
 const bodyParser = require("body-parser");
-const errorHandling = require("../../api/middlewares/handleErrors");
-const badParsingError = require("../../api/middlewares/badParsing");
-const defaultRoute  = require("../../api/routes/defaultRoute");
+const errorHandling = require("./middlewares/handleErrors");
+const badParsingError = require("./middlewares/badParsing");
+const defaultRoute  = require("./routes/defaultRoute");
+const logManager = require("./logManager");
 
 const PATH = "/api";
 
