@@ -27,6 +27,9 @@ router.post("/", (req, res, next) => {
 
   res.status(201);
   res.send(AlbumDto.map(albumCreated));
+
+  // Notify subscriptors that a new album has been added
+  body.newsletterHelper.notify(body.unqfy, body.artistId, albumCreated);
   
   res.locals.message = "El Album " + albumCreated.id + " fue creado";
   next();

@@ -15,12 +15,14 @@ const handleErrors = require("../api/middlewares/handleErrors");
 const unqfy = require("../api/middlewares/unqfy");
 const badParsingError = require("../api/middlewares/badParsing");
 const notify = require("../api/middlewares/notification.js");
+const newsletterHelper = require("./middlewares/newsletter");
 
 app.use(bodyParser.json());
 
 app.use(badParsingError);
 
 app.use(unqfy);
+app.use(newsletterHelper);
 
 const api = '/api';
 
