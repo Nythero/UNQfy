@@ -8,12 +8,12 @@ const subscribeRoutes = require("./routes/subscribeRoutes");
 const unsubscribeRoutes = require("./routes/unsubscribeRoutes");
 const notifyRoutes = require("./routes/notifyRoutes");
 const subscriptionRoutes = require("./routes/subscriptionRoutes");
-const defaultRoute = require("../api/routes/defaultRoute");
+const defaultRoute = require("./routes/defaultRoute");
 
-const handleErrors = require("../api/middlewares/handleErrors");
+const handleErrors = require("./middlewares/handleErrors");
 const observerManager = require("./middlewares/observerManagerMiddleware");
 const unqfyClient = require("./middlewares/unqfyMiddleware");
-const badParsingError = require("../api/middlewares/badParsing");
+const badParsingError = require("./middlewares/badParsing");
 
 app.use(bodyParser.json());
 

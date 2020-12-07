@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { BadRequest } = require("../../api/utils/errors");
-const NonexistentResourceError = require("../../error/nonexistentResourceError");
+const { BadRequest } = require("../utils/errors");
+const NonexistentResourceError = require("../utils/nonexistentResourceError");
 
 // Desuscribir un email
 router.post("/", (req, res, next) => {
