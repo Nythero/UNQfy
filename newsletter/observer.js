@@ -20,9 +20,8 @@ class Observer {
           email: "unqfy@gmail.com",
         }
       )
-      .then((gmailResponse) => {
+      .then(() => {
         console.log("Mail enviado!");
-        console.log(gmailResponse);
       })
       .catch((error) => {
         console.error("Algo salió mal");
