@@ -27,6 +27,7 @@ class ObserverManager {
   }
 
   notify(artistId, subject, message) {
+    if (!this.observers.has(artistId)) return;
     const toNotify = this.observers.get(artistId);
     toNotify.forEach((obs) => {
       obs.sendEmail(subject, message);

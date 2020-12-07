@@ -42,6 +42,9 @@ router.delete("/:id", (req, res, next) => {
 
   res.status(204).send();
 
+  // Delete artist's subscriptions
+  body.newsletterHelper.deleteSubscriptions(id);
+
   res.locals.message = "El Artista " + id + " fue eliminado";
   next();
 });
