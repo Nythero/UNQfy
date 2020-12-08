@@ -1,6 +1,7 @@
+const NEWSLETTER_API_HOST = process.env.NEWSLETTER_API_HOST;
 const axios = require("axios").default;
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:6000/api/",
+  baseURL: NEWSLETTER_API_HOST,
 });
 
 class NewsletterClient {
@@ -13,7 +14,7 @@ class NewsletterClient {
   }
 
   notify(bodyData) {
-    axiosInstance.post("notify", {
+    axiosInstance.post("/api/notify", {
       artistId: bodyData.artistId,
       subject: bodyData.subject,
       message: bodyData.message,
