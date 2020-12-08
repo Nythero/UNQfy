@@ -10,6 +10,7 @@ router.post("/", (req, res, next) => {
 
   const artistId = parseInt(body.artistId);
   body.unqfyClient.existsArtist(artistId).then((exists) => {
+    console.log(exists);
     if (exists) body.observerManager.subscribe(artistId, body.email);
     else
       return next(

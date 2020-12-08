@@ -16,12 +16,10 @@ class UnqfyClient {
   existsArtist(artistId) {
     return axiosInstance
       .get(`/api/artists/${artistId}`)
-      .then((res) => { 
-        console.log(res);
-        res.status === 200 && res.data.id === artistId;
+      .then((res) => {
+        return res.status === 200 && res.data.id === artistId;
       })
       .catch((err) => {
-        console.log(err);
         return false;
       });
   }

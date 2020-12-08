@@ -45,8 +45,6 @@ const UNQFY_API_HOST = process.env["UNQFY_API_HOST"];
 const NEWSLETTER_API_HOST = process.env["NEWSLETTER_API_HOST"];
 const LOGGING_API_HOST = process.env["LOGGING_API_HOST"];
 
-console.log(LOGGING_API_HOST);
-
 monitorManager.add("UNQfy", UNQFY_API_HOST);
 monitorManager.add("Newsletter", NEWSLETTER_API_HOST);
 monitorManager.add("Logging", LOGGING_API_HOST);

@@ -25,6 +25,7 @@ const logManager = {
 	const logMessage = new Date() + " - " + logData.level + " - " + logData.message + "\n";
         const newFile = file + logMessage;
 	writeFile(PATH, newFile);
+	console.log(logMessage);
       })
       .catch(err => console.log(err.message));
   },

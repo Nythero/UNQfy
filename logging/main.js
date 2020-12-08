@@ -1,6 +1,6 @@
 const readLine = require('readline');
 const app      = require('./server.js');
-const port = 4000;
+const port = 5002;
 
 const ON  = "server on";
 
