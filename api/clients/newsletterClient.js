@@ -1,4 +1,5 @@
 const NEWSLETTER_API_HOST = process.env.NEWSLETTER_API_HOST;
+// const NEWSLETTER_API_HOST = "http://localhost:6000";
 const axios = require("axios").default;
 const axiosInstance = axios.create({
   baseURL: NEWSLETTER_API_HOST,

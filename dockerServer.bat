@@ -1,0 +1,1 @@
+docker run --net unqfynet --ip 172.20.0.21 -p 5000:3000 --env-file hosts.txt --name unqfy --user node nythero/unqfy

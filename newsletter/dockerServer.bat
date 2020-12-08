@@ -1,0 +1,1 @@
+docker run --net unqfynet --ip 172.20.0.22 -p 5001:6000 --env-file ../hosts.txt --name newsletter nythero/newsletter

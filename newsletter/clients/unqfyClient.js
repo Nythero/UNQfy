@@ -1,5 +1,6 @@
 const UNQFY_API_HOST = process.env.UNQFY_API_HOST;
-const axios = require("axios").default;
+// const UNQFY_API_HOST = "http://localhost:3000";
+const axios = require("axios");
 const axiosInstance = axios.create({
   baseURL: UNQFY_API_HOST,
 });
@@ -18,7 +19,7 @@ class UnqfyClient {
       .get(`/api/artists/${artistId}`)
       .then((res) => { 
         console.log(res);
-        res.status === 200 && res.data.id === artistId;
+        return res.status === 200 && res.data.id === artistId;
       })
       .catch((err) => {
         console.log(err);
