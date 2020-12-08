@@ -10,11 +10,11 @@ COPY . .
 
 # Le da permisos al usuario node para escribir en /usr/src/app
 # Como comentario, notar que el comando RUN nos permite ejecutar culquier comando bash valido.
-RUN chown -R node:users /usr/src/app
+RUN chown -R node:users /usr/src/app/data.json
 
 # Habilita el usuario node. Por defecto, los containers corren los comandos con el usuario root
 USER node
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD ["node", "./api/server.js"]
