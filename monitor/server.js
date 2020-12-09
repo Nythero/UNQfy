@@ -1,14 +1,14 @@
 const express = require("express");
 const app     = express();
-const port    = 5000;
+const port    = 5003;
 const bodyParser      = require("body-parser");
-const errorHandling   = require("../../api/middlewares/handleErrors");
-const badParsingError = require("../../api/middlewares/badParsing");
-const defaultRoute    = require("../../api/routes/defaultRoute");
-const servicesRoutes  = require("./servicesRoutes");
-const monitorsRoutes   = require("./monitorRoutes");
+const errorHandling   = require("./middlewares/handleErrors");
+const badParsingError = require("./middlewares/badParsing");
+const defaultRoute    = require("./routes/defaultRoute");
+const servicesRoutes  = require("./routes/servicesRoutes");
+const monitorsRoutes  = require("./routes/monitorRoutes");
 
-const monitor = require("../monitor");
+const monitor = require("./monitor");
 
 
 const PATH = "/api";

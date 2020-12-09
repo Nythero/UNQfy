@@ -1,7 +1,10 @@
 const axios = require('axios');
-const axiosInstance = axios.create({baseURL: "http://localhost:4000" });
+
+const LOGGING_API_HOST = process.env["LOGGING_API_HOST"];
 
 const loggingEndpoint = "/api/notify";
+
+const axiosInstance = axios.create({baseURL: LOGGING_API_HOST });
 
 const notify = (req, res, next) => {
   if (res.headersSent){

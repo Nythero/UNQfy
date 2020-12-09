@@ -1,6 +1,6 @@
 const Monitor = require("./monitor");
-const NonexistentResourceError = require("../error/nonexistentResourceError");
-const InvalidDataError = require("../error/invalidDataError");
+const NonexistentResourceError = require("./error/nonexistentResourceError");
+const InvalidDataError = require("./error/invalidDataError");
 
 const monitorManager = {
   monitors : {},
@@ -41,9 +41,13 @@ const monitorManager = {
   }
 };
 
-monitorManager.add("UNQfy", "http://localhost:3000");
-monitorManager.add("Logging", "http://localhost:4000");
-monitorManager.add("Newsletter", "URL");
+const UNQFY_API_HOST = process.env["UNQFY_API_HOST"];
+const NEWSLETTER_API_HOST = process.env["NEWSLETTER_API_HOST"];
+const LOGGING_API_HOST = process.env["LOGGING_API_HOST"];
+
+monitorManager.add("UNQfy", UNQFY_API_HOST);
+monitorManager.add("Newsletter", NEWSLETTER_API_HOST);
+monitorManager.add("Logging", LOGGING_API_HOST);
 
 monitorManager.triggerAll(true);
 

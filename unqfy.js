@@ -1,14 +1,20 @@
 /* eslint-disable no-undef */
 const picklify = require("picklify"); // para cargar/guarfar unqfy
 const fs = require("fs"); // para cargar/guarfar unqfy
+
+//Domain
 const Artist = require("./domain/artist");
-const idManager = require("./utils/idManager");
 const Album = require("./domain/album");
 const Track = require("./domain/track");
 const Playlist = require("./domain/playlist");
 const Usuario = require("./domain/usuario");
+
+//Utils
+const idManager = require("./utils/idManager");
 const thisIsCreator = require("./thisIsCreator");
 const unqfyRequester = require("./unqfyRequester");
+
+//Clients
 const MusixMatchClient = require("./externalClients/musixMatchClient");
 
 //Errores

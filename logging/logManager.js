@@ -6,7 +6,7 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const logglyLog = require('./logglyClient');
 
-const InvalidLogError = require('./invalidLogError');
+const InvalidLogError = require('./error/invalidLogError');
 
 const logManager = {
   log : function (logData) {
@@ -25,6 +25,7 @@ const logManager = {
 	const logMessage = new Date() + " - " + logData.level + " - " + logData.message + "\n";
         const newFile = file + logMessage;
 	writeFile(PATH, newFile);
+	console.log(logMessage);
       })
       .catch(err => console.log(err.message));
   },

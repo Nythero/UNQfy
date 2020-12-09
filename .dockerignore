@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+logging
+monitor
+newsletter
+.elsintrc.json
+.gitignore
+.vscode
+llenar.bat
+hosts.txt
